@@ -12,6 +12,10 @@ public class Camera {
 	
 	public Camera(){}
 	
+	public Camera(Vector3f pos){
+		this.position = pos;
+	}
+	
 	public void move(){
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)){
 			position.z -= 0.2f;

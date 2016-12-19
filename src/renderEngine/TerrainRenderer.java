@@ -9,12 +9,12 @@ import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
-import Textures.ModelTexture;
 import entities.Entity;
 import models.RawModel;
 import models.TexturedModel;
 import shaders.TerrainShader;
 import terrain.Terrain;
+import textures.ModelTexture;
 import toolBox.Maths;
 
 public class TerrainRenderer {
