@@ -8,6 +8,8 @@ public class Camera {
 	
 	private static final float MOUSE_SENSITIVITY = 0.1f;
 	private static final float ANGLE_RESET_SPEED = 1f;
+	private static final float MAX_ZOOM = 200;
+	private static final float MIN_ZOOM = 20;
 	
 	private Player player;
 	
@@ -32,7 +34,7 @@ public class Camera {
 		float xOffset = (float) (hDistance * Math.sin(Math.toRadians(theta)));
 		float zOffset = (float) (hDistance * Math.cos(Math.toRadians(theta)));
 		position.x = player.getPosition().x - xOffset;
-		position.y = player.getPosition().y + vDistance;
+		position.y = player.getPosition().y + vDistance + player.getModelHeight();
 		position.z = player.getPosition().z - zOffset;
 		yaw = 180 - (player.getRotY() + angleAroundPlayer);
 	}
@@ -40,6 +42,12 @@ public class Camera {
 	private void calculateZoom(){
 		float zoomLevel = Mouse.getDWheel() * MOUSE_SENSITIVITY;
 		distanceFromPlayer -= zoomLevel;
+		if (distanceFromPlayer > MAX_ZOOM){
+			distanceFromPlayer = MAX_ZOOM;
+		}
+		if (distanceFromPlayer < MIN_ZOOM){
+			distanceFromPlayer = MIN_ZOOM;
+		}
 	}
 	
 	private void calculatePitch(){

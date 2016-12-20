@@ -5,6 +5,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import models.TexturedModel;
 import renderEngine.DisplayManager;
+import terrain.Terrain;
 
 public class Player extends Entity {
 	
@@ -14,6 +15,8 @@ public class Player extends Entity {
 	private static final float GRAVITY = -50;
 	private static final float TERRAIN_HEIGHT = 0;
 
+	private float modelHeight = 5;
+	
 	private float currentSpeed;
 	private float currentTurnSpeed;
 	private float upwardsSpeed;
@@ -24,7 +27,7 @@ public class Player extends Entity {
 		super(model, position, rotX, rotY, rotZ, scale);
 	}
 	
-	public void move(){
+	public void move(Terrain terrain){
 		checkInputs();
 		float t = DisplayManager.getFrameTimeSeconds();
 		super.increaseRotation(0, currentTurnSpeed * t, 0);
@@ -34,9 +37,10 @@ public class Player extends Entity {
 		float dz = (float) (distance * Math.cos(Math.toRadians(super.getRotY())));
 		float dy = upwardsSpeed * t;
 		super.increasePosition(dx, dy, dz);
-		if (super.getPosition().y < TERRAIN_HEIGHT){
+		float terrainHeight = terrain.getHeightOfTerrain(super.getPosition().x, super.getPosition().z);
+		if (super.getPosition().y < terrainHeight){
 			upwardsSpeed = 0;
-			super.getPosition().y = TERRAIN_HEIGHT;
+			super.getPosition().y = terrainHeight;
 			inAir = false;
 		}
 	}
@@ -68,5 +72,13 @@ public class Player extends Entity {
 			upwardsSpeed = JUMP_POWER;
 			inAir = true;
 		}
+	}
+
+	public float getModelHeight() {
+		return modelHeight;
+	}
+
+	public void setModelHeight(float modelHeight) {
+		this.modelHeight = modelHeight;
 	}
 }
