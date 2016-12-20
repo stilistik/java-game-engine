@@ -5,12 +5,17 @@ import java.util.List;
 import java.util.Random;
 
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import entities.Camera;
 import entities.Entity;
+import entities.EntityRenderer;
+import entities.EntityShader;
 import entities.Light;
 import entities.Player;
+import gui.GuiRenderer;
+import gui.GuiTexture;
 import models.RawModel;
 import models.TexturedModel;
 import objParser.ModelData;
@@ -18,8 +23,6 @@ import objParser.OBJFileLoader;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
-import renderEngine.EntityRenderer;
-import shaders.StaticShader;
 import terrain.Terrain;
 import textures.ModelTexture;
 import textures.TerrainTexture;
@@ -53,28 +56,29 @@ public class MainGameLoop {
 
 		ModelData fernModelData = OBJFileLoader.loadOBJ("fernModel");
 		RawModel fernRawModel = loader.loadToVAO(fernModelData.getVertices(), fernModelData.getTextureCoords(), fernModelData.getNormals(), fernModelData.getIndices());
-		ModelTexture fernTexture = new ModelTexture(loader.loadTexture("fernTexture"));
-		fernTexture.setFakeLighting(true);
-		fernTexture.setTransparency(true);
-		TexturedModel fernModel = new TexturedModel(fernRawModel, fernTexture);
-		for (int i = 0; i < 200; i++){
-			float x = random.nextFloat()*800;
-			float z = random.nextFloat()*800;
-			float y = terrain.getHeightOfTerrain(x, z);
-			float ry = random.nextFloat()*600;
-			entities.add(new Entity(fernModel, new Vector3f(x,y,z),0,ry,0,1));
-		}
-		
-		ModelData treeModelData = OBJFileLoader.loadOBJ("lowPolyTreeModel");
-		RawModel treeRawModel = loader.loadToVAO(treeModelData.getVertices(), treeModelData.getTextureCoords(), treeModelData.getNormals(), treeModelData.getIndices());
-		ModelTexture treeTexture = new ModelTexture(loader.loadTexture("lowPolyTreeTexture"));
-		TexturedModel treeModel = new TexturedModel(treeRawModel, treeTexture);
+		ModelTexture fernTextureAtlas = new ModelTexture(loader.loadTexture("fernTextureAtlas"));
+		fernTextureAtlas.setFakeLighting(true);
+		fernTextureAtlas.setTransparency(true);
+		fernTextureAtlas.setAtlasDimension(2);
+		TexturedModel fernModel = new TexturedModel(fernRawModel, fernTextureAtlas);
 		for (int i = 0; i < 600; i++){
 			float x = random.nextFloat()*800;
 			float z = random.nextFloat()*800;
 			float y = terrain.getHeightOfTerrain(x, z);
 			float ry = random.nextFloat()*600;
-			entities.add(new Entity(treeModel, new Vector3f(x,y,z),0,ry,0,1));
+			entities.add(new Entity(fernModel, random.nextInt(4), new Vector3f(x,y,z),0,ry,0,1));
+		}
+		
+		ModelData pineModelData = OBJFileLoader.loadOBJ("pineModel");
+		RawModel pineRawModel = loader.loadToVAO(pineModelData.getVertices(), pineModelData.getTextureCoords(), pineModelData.getNormals(), pineModelData.getIndices());
+		ModelTexture pineTexture = new ModelTexture(loader.loadTexture("pineTexture"));
+		TexturedModel pineModel = new TexturedModel(pineRawModel, pineTexture);
+		for (int i = 0; i < 600; i++){
+			float x = random.nextFloat()*800;
+			float z = random.nextFloat()*800;
+			float y = terrain.getHeightOfTerrain(x, z);
+			float ry = random.nextFloat()*600;
+			entities.add(new Entity(pineModel, new Vector3f(x,y,z),0,ry,0,1));
 		}
 		
 		ModelData grassModelData = OBJFileLoader.loadOBJ("grassModel");
@@ -102,7 +106,7 @@ public class MainGameLoop {
 		Player player = new Player(playerModel, new Vector3f(400, 40, 400), 0, 0, 0, 1);
 		
 		// camera
-		Camera camera = new Camera(player);
+		Camera camera = new Camera(player);		
 		
 		while(!Display.isCloseRequested()){
 			player.move(terrain);
@@ -113,7 +117,6 @@ public class MainGameLoop {
 				renderer.processEntity(e);
 			}
 			renderer.render(sun, camera);
-
 			DisplayManager.updateDisplay();
 		}		
 		loader.cleanUp();

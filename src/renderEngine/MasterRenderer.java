@@ -11,11 +11,13 @@ import org.lwjgl.util.vector.Matrix4f;
 
 import entities.Camera;
 import entities.Entity;
+import entities.EntityRenderer;
+import entities.EntityShader;
 import entities.Light;
 import models.TexturedModel;
-import shaders.StaticShader;
-import shaders.TerrainShader;
 import terrain.Terrain;
+import terrain.TerrainRenderer;
+import terrain.TerrainShader;
 
 public class MasterRenderer {
 	
@@ -30,7 +32,7 @@ public class MasterRenderer {
 	
 	private Matrix4f projectionMatrix;
 	
-	private StaticShader staticShader;
+	private EntityShader staticShader;
 	private EntityRenderer entityRenderer;
 
 	private TerrainShader terrainShader;
@@ -42,7 +44,7 @@ public class MasterRenderer {
 	public MasterRenderer(){
 		enableCulling();
 		createProjectionMatrix();
-		staticShader = new StaticShader();
+		staticShader = new EntityShader();
 		entityRenderer = new EntityRenderer(staticShader, projectionMatrix);
 		terrainShader = new TerrainShader();
 		terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);

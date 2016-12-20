@@ -1,4 +1,4 @@
-package renderEngine;
+package entities;
 
 import java.util.List;
 import java.util.Map;
@@ -10,18 +10,17 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
 
-import entities.Entity;
 import models.RawModel;
 import models.TexturedModel;
-import shaders.StaticShader;
+import renderEngine.MasterRenderer;
 import textures.ModelTexture;
 import toolBox.Maths;
 
 public class EntityRenderer {
 		
-	private StaticShader shader;
+	private EntityShader shader;
 	
-	public EntityRenderer(StaticShader shader, Matrix4f projectionMatrix){
+	public EntityRenderer(EntityShader shader, Matrix4f projectionMatrix){
 		this.shader = shader;
 		this.shader.start();
 		this.shader.loadProjectionMatrix(projectionMatrix);
@@ -51,6 +50,7 @@ public class EntityRenderer {
 		if (texture.isTransparency()){
 			MasterRenderer.disableCulling();
 		}
+		shader.loadAtlasDimension(texture.getAtlasDimension());
 		shader.loadFakeLightingVariable(texture.isFakeLighting());
 		shader.loadShineVariables(texture.getShineDamper(), texture.getReflectivity());
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
@@ -68,5 +68,6 @@ public class EntityRenderer {
 	private void prepareInstance(Entity entity){
 		Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(), entity.getRotX(), entity.getRotY(), entity.getRotZ(), entity.getScale());
 		shader.loadTransformationMatrix(transformationMatrix);
+		shader.loadAtlasOffsets(entity.getTextureXOffset(), entity.getTextureYOffset());
 	}
 }

@@ -7,5 +7,10 @@ Features:
 	-per pixel lighting (diffuse, specular, ambient)
 	-flat terrain
 	-transparency & fog
-	-interactive camera movement
 	-mipmapping
+	-terrain height map
+	-terrain collision detection
+	-player movement
+	-3rd person camera
+	-texture atlases
+	-gui rendering system

@@ -1,16 +1,16 @@
-package shaders;
+package entities;
 
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
-import entities.Camera;
-import entities.Light;
+import shaders.ShaderProgram;
 import toolBox.Maths;
 
-public class TerrainShader extends ShaderProgram {
+public class EntityShader extends ShaderProgram{
 
-	private static final String VERTEX_FILE = "src/shaders/terrainVertexShader.txt";
-	private static final String FRAGMENT_FILE = "src/shaders/terrainFragmentShader.txt";
+	private static final String VERTEX_FILE = "src/shaders/entityVertexShader.txt";
+	private static final String FRAGMENT_FILE = "src/shaders/entityFragmentShader.txt";
 	
 	private int location_transformationMatrix;
 	private int location_projectionMatrix;
@@ -19,14 +19,12 @@ public class TerrainShader extends ShaderProgram {
 	private int location_lightColor;
 	private int location_shineDamper;
 	private int location_reflectivity;
+	private int location_useFakeLighting;
 	private int location_skyColor;
-	private int location_backgroundTexture;
-	private int location_rTexture;
-	private int location_gTexture;
-	private int location_bTexture;
-	private int location_blendMap;
+	private int location_atlasDimension;
+	private int location_atlasOffsets;
 	
-	public TerrainShader() {
+	public EntityShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
 	}
 
@@ -46,24 +44,26 @@ public class TerrainShader extends ShaderProgram {
 		location_lightColor = super.getUniformLocation("lightColor");
 		location_shineDamper = super.getUniformLocation("shineDamper");
 		location_reflectivity = super.getUniformLocation("reflectivity");
+		location_useFakeLighting = super.getUniformLocation("useFakeLighting");
 		location_skyColor = super.getUniformLocation("skyColor");
-		location_backgroundTexture = super.getUniformLocation("backgroundTexture");
-		location_rTexture = super.getUniformLocation("rTexture");
-		location_gTexture = super.getUniformLocation("gTexture");
-		location_bTexture = super.getUniformLocation("bTexture");
-		location_blendMap = super.getUniformLocation("blendMap");
+		location_atlasDimension = super.getUniformLocation("atlasDimension");
+		location_atlasOffsets = super.getUniformLocation("atlasOffsets");
 	}	
 	
-	public void connectTextureUnits(){
-		super.loadInt(location_backgroundTexture, 0);
-		super.loadInt(location_rTexture, 1);
-		super.loadInt(location_gTexture, 2);
-		super.loadInt(location_bTexture, 3);
-		super.loadInt(location_blendMap, 4);		
+	public void loadAtlasDimension(int dimension){
+		super.loadFloat(location_atlasDimension, dimension);
+	}
+	
+	public void loadAtlasOffsets(float x, float y){
+		super.loadVector2f(location_atlasOffsets, new Vector2f(x, y));
 	}
 	
 	public void loadSkyColor(float r, float g, float b){
-		super.loadVector(location_skyColor, new Vector3f(r,g,b));
+		super.loadVector3f(location_skyColor, new Vector3f(r,g,b));
+	}
+	
+	public void loadFakeLightingVariable(boolean useFake){
+		super.loadBoolean(location_useFakeLighting, useFake);
 	}
 	
 	public void loadShineVariables(float damper, float reflectivity){
@@ -72,8 +72,8 @@ public class TerrainShader extends ShaderProgram {
 	}
 	
 	public void loadLight(Light light){
-		super.loadVector(location_lightPosition, light.getPosition());
-		super.loadVector(location_lightColor, light.getColor());
+		super.loadVector3f(location_lightPosition, light.getPosition());
+		super.loadVector3f(location_lightColor, light.getColor());
 	}
 	
 	public void loadTransformationMatrix(Matrix4f matrix){
