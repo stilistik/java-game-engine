@@ -10,6 +10,7 @@ import org.lwjgl.util.vector.Vector3f;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
+import entities.Player;
 import models.RawModel;
 import models.TexturedModel;
 import objParser.ModelData;
@@ -21,6 +22,8 @@ import renderEngine.EntityRenderer;
 import shaders.StaticShader;
 import terrain.Terrain;
 import textures.ModelTexture;
+import textures.TerrainTexture;
+import textures.TerrainTexturePack;
 
 public class MainGameLoop {
 
@@ -29,6 +32,8 @@ public class MainGameLoop {
 		Loader loader = new Loader();
 		MasterRenderer renderer = new MasterRenderer();
 		Random random = new Random();
+		
+		// entities
 		List<Entity> entities = new ArrayList<Entity>();
 		
 		ModelData stallModelData = OBJFileLoader.loadOBJ("stallModel");
@@ -44,8 +49,8 @@ public class MainGameLoop {
 		fernTexture.setTransparency(true);
 		TexturedModel fernModel = new TexturedModel(fernRawModel, fernTexture);
 		for (int i = 0; i < 200; i++){
-			float x = random.nextFloat()*800-400;
-			float z = random.nextFloat()*800-400;
+			float x = random.nextFloat()*800;
+			float z = random.nextFloat()*800;
 			float ry = random.nextFloat()*600;
 			entities.add(new Entity(fernModel, new Vector3f(x,0,z),0,ry,0,1));
 		}
@@ -54,9 +59,9 @@ public class MainGameLoop {
 		RawModel treeRawModel = loader.loadToVAO(treeModelData.getVertices(), treeModelData.getTextureCoords(), treeModelData.getNormals(), treeModelData.getIndices());
 		ModelTexture treeTexture = new ModelTexture(loader.loadTexture("lowPolyTreeTexture"));
 		TexturedModel treeModel = new TexturedModel(treeRawModel, treeTexture);
-		for (int i = 0; i < 200; i++){
-			float x = random.nextFloat()*800-400;
-			float z = random.nextFloat()*800-400;
+		for (int i = 0; i < 600; i++){
+			float x = random.nextFloat()*800;
+			float z = random.nextFloat()*800;
 			float ry = random.nextFloat()*600;
 			entities.add(new Entity(treeModel, new Vector3f(x,0,z),0,ry,0,1));
 		}
@@ -74,19 +79,33 @@ public class MainGameLoop {
 			entities.add(new Entity(grassModel, new Vector3f(x,0,z),0,ry,0,2));
 		}
 		
+		// light
 		Light sun = new Light(new Vector3f(0,1000,0), new Vector3f(1,1,1));
-		Camera camera = new Camera(new Vector3f(0,10,0));
 		
-		ModelTexture terrainTexture = new ModelTexture(loader.loadTexture("grassFloorTexture"));
-		Terrain terrain1 = new Terrain(0,-1,loader, terrainTexture);
-		Terrain terrain2 = new Terrain(-1,-1,loader, terrainTexture);
-
+		// terrain
+		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassFloorTexture"));
+		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("mudFloorTexture"));
+		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("flowerFloorTexture"));
+		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("pathFloorTexture"));
+		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
+		TerrainTexturePack ttp = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
+		Terrain terrain = new Terrain(0, 0, loader, ttp, blendMap);
+		
+		// player
+		ModelData playerData = OBJFileLoader.loadOBJ("bunnyModel");
+		RawModel playerRawModel = loader.loadToVAO(playerData.getVertices(), playerData.getTextureCoords(), playerData.getNormals(), playerData.getIndices());
+		ModelTexture playerTexture = new ModelTexture(loader.loadTexture("pathFloorTexture"));
+		TexturedModel playerModel = new TexturedModel(playerRawModel, playerTexture);
+		Player player = new Player(playerModel, new Vector3f(400, 0, 400), 0, 0, 0, 1);
+		
+		// camera
+		Camera camera = new Camera(player);
 		
 		while(!Display.isCloseRequested()){
+			player.move();
 			camera.move();
-			renderer.processTerrain(terrain1);
-			renderer.processTerrain(terrain2);
-
+			renderer.processTerrain(terrain);
+			renderer.processEntity(player);
 			for (Entity e : entities){
 				renderer.processEntity(e);
 			}
