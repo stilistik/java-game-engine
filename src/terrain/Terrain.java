@@ -27,26 +27,39 @@ public class Terrain {
 	
 	private RawModel model;
 	private TerrainTexturePack texturePack;
-	private TerrainTexture blendMap;
+	private TerrainTexture blendMapTexture;
+	
+	private BufferedImage heightMap;
+	private BufferedImage blendMap;
 	
 	private float[][] heights;
 	
-	public Terrain(int gridX, int gridZ, Loader loader, TerrainTexturePack texturePack, TerrainTexture blendMap, String heightMap){
+	public Terrain(int gridX, int gridZ, Loader loader, TerrainTexturePack texturePack, String blendMapLocation, String heightMapLocation){
+		loadMaps(heightMapLocation, blendMapLocation);
+		this.blendMapTexture = new TerrainTexture(loader.loadTexture(blendMapLocation));
 		this.texturePack = texturePack;
-		this.blendMap = blendMap;
 		this.x = gridX * SIZE;
 		this.z = gridZ * SIZE;
-		this.model = generateTerrain(loader, heightMap);		
+		this.model = generateTerrain(loader, heightMapLocation);		
 	}
 	
-	private RawModel generateTerrain(Loader loader, String heightMap){
-		BufferedImage image = null;
+	private void loadMaps(String heightMapLocation, String blendMapLocation){
+		heightMap = null;
 		try {
-			image = ImageIO.read(new File("res/textures/"+ heightMap +".png"));
+			heightMap = ImageIO.read(new File("res/textures/"+ heightMapLocation +".png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		int VERTEX_COUNT = image.getHeight();
+		blendMap = null;
+		try {
+			blendMap = ImageIO.read(new File("res/textures/"+ blendMapLocation +".png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private RawModel generateTerrain(Loader loader, String heightMapLocation){
+		int VERTEX_COUNT = heightMap.getHeight();
 		int count = VERTEX_COUNT * VERTEX_COUNT;
 		heights = new float[VERTEX_COUNT][VERTEX_COUNT];
 		float[] vertices = new float[count * 3];
@@ -56,12 +69,12 @@ public class Terrain {
 		int vertexPointer = 0;
 		for(int i=0;i<VERTEX_COUNT;i++){
 			for(int j=0;j<VERTEX_COUNT;j++){
-				float height = getHeight(j,i,image);
+				float height = getHeight(j,i,heightMap);
 				heights[j][i] = height;
 				vertices[vertexPointer*3] = (float)j/((float)VERTEX_COUNT - 1) * SIZE;
 				vertices[vertexPointer*3+1] = height;
 				vertices[vertexPointer*3+2] = (float)i/((float)VERTEX_COUNT - 1) * SIZE;
-				Vector3f normal = calculateNormal(j, i, image);
+				Vector3f normal = calculateNormal(j, i, heightMap);
 				normals[vertexPointer*3] = normal.x;
 				normals[vertexPointer*3+1] = normal.y;
 				normals[vertexPointer*3+2] = normal.z;
@@ -149,7 +162,7 @@ public class Terrain {
 		return texturePack;
 	}
 
-	public TerrainTexture getBlendMap() {
-		return blendMap;
+	public TerrainTexture getBlendMapTexture() {
+		return blendMapTexture;
 	}
 }

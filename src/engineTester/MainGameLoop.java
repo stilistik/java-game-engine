@@ -41,9 +41,8 @@ public class MainGameLoop {
 		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("mudFloorTexture"));
 		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("flowerFloorTexture"));
 		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("mossPathTexture"));
-		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
 		TerrainTexturePack ttp = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
-		Terrain terrain = new Terrain(0, 0, loader, ttp, blendMap, "heightMap");		
+		Terrain terrain = new Terrain(0, 0, loader, ttp, "blendMap", "heightMap");		
 		
 		// entities
 		List<Entity> entities = new ArrayList<Entity>();

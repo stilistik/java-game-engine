@@ -23,4 +23,4 @@ Next:
 	-water rendering system
 	-mouse picker
 	-terrain shaping
-	
+	-increase terrain max textures
