@@ -34,11 +34,18 @@ public class DisplayManager {
 	}
 	
 	public static void updateDisplay(){
+		checkInputs();
 		Display.sync(FPS_CAP);
 		Display.update();
 		long currentFrameTime = getCurrentTime();
 		delta = currentFrameTime - lastFrameTime;
 		lastFrameTime = currentFrameTime;
+	}
+	
+	private static void checkInputs(){
+		if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) && Keyboard.isKeyDown(Keyboard.KEY_TAB)){
+			DisplayManager.exitFullScreen();
+		}
 	}
 	
 	public static void closeDisplay(){
@@ -48,7 +55,6 @@ public class DisplayManager {
 	public static void setFullScreen(){
 		try {
 			DisplayMode[] modes = Display.getAvailableDisplayModes();
-			System.out.println(modes.length);
 			Display.setDisplayMode(modes[20]);
 			Display.setFullscreen(true);
 			GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());
