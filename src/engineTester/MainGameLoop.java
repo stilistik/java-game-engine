@@ -40,14 +40,14 @@ public class MainGameLoop {
 		// terrain
 		List<TerrainTexture> terrainTextures = new ArrayList<TerrainTexture>();
 		List<TerrainTexture> terrainTextureMaps = new ArrayList<TerrainTexture>();
-		terrainTextures.add(new TerrainTexture(loader.loadTexture("grassFloorTexture")));
-		terrainTextures.add(new TerrainTexture(loader.loadTexture("mudFloorTexture")));
-		terrainTextures.add(new TerrainTexture(loader.loadTexture("flowerFloorTexture")));
-		terrainTextures.add(new TerrainTexture(loader.loadTexture("mossPathTexture")));
-		terrainTextureMaps.add(new TerrainTexture(loader.loadTexture("texMap_c0")));
-		terrainTextureMaps.add(new TerrainTexture(loader.loadTexture("texMap_c1")));
-		terrainTextureMaps.add(new TerrainTexture(loader.loadTexture("texMap_c2")));
-		terrainTextureMaps.add(new TerrainTexture(loader.loadTexture("texMap_c3")));
+		terrainTextures.add(new TerrainTexture(loader.loadTexture("textures/LOLgrassFloorTexture0")));
+		terrainTextures.add(new TerrainTexture(loader.loadTexture("textures/LOLmossyFloorTexture1")));
+		terrainTextures.add(new TerrainTexture(loader.loadTexture("textures/LOLgrassFloorTexture2")));
+		terrainTextures.add(new TerrainTexture(loader.loadTexture("textures/LOLstoneFloorTexture0")));
+		terrainTextureMaps.add(new TerrainTexture(loader.loadTexture("maps/texMap_c0")));
+		terrainTextureMaps.add(new TerrainTexture(loader.loadTexture("maps/texMap_c1")));
+		terrainTextureMaps.add(new TerrainTexture(loader.loadTexture("maps/texMap_c2")));
+		terrainTextureMaps.add(new TerrainTexture(loader.loadTexture("maps/texMap_c3")));
 
 		TerrainTexturePack ttp = new TerrainTexturePack(terrainTextures, terrainTextureMaps);
 		Terrain terrain = new Terrain(0, 0, loader, ttp, "heightMap");		
@@ -55,15 +55,15 @@ public class MainGameLoop {
 		// entities
 		List<Entity> entities = new ArrayList<Entity>();
 		
-		ModelData stallModelData = OBJFileLoader.loadOBJ("stallModel");
+		ModelData stallModelData = OBJFileLoader.loadOBJ("obj/stallModel");
 		RawModel stallRawModel = loader.loadToVAO(stallModelData.getVertices(), stallModelData.getTextureCoords(), stallModelData.getNormals(), stallModelData.getIndices());
-		ModelTexture stallTexture = new ModelTexture(loader.loadTexture("stallTexture"));
+		ModelTexture stallTexture = new ModelTexture(loader.loadTexture("textures/stallTexture"));
 		TexturedModel stallModel = new TexturedModel(stallRawModel, stallTexture);
 		entities.add(new Entity(stallModel, new Vector3f(0,0,-40),0,0,0,1.7f));
 
-		ModelData fernModelData = OBJFileLoader.loadOBJ("fernModel");
+		ModelData fernModelData = OBJFileLoader.loadOBJ("obj/fernModel");
 		RawModel fernRawModel = loader.loadToVAO(fernModelData.getVertices(), fernModelData.getTextureCoords(), fernModelData.getNormals(), fernModelData.getIndices());
-		ModelTexture fernTextureAtlas = new ModelTexture(loader.loadTexture("fernTextureAtlas"));
+		ModelTexture fernTextureAtlas = new ModelTexture(loader.loadTexture("textures/fernTextureAtlas"));
 		fernTextureAtlas.setFakeLighting(true);
 		fernTextureAtlas.setTransparency(true);
 		fernTextureAtlas.setAtlasDimension(2);
@@ -76,11 +76,11 @@ public class MainGameLoop {
 			entities.add(new Entity(fernModel, random.nextInt(4), new Vector3f(x,y,z),0,ry,0,1));
 		}
 		
-		ModelData pineModelData = OBJFileLoader.loadOBJ("pineModel");
+		ModelData pineModelData = OBJFileLoader.loadOBJ("obj/pineModel");
 		RawModel pineRawModel = loader.loadToVAO(pineModelData.getVertices(), pineModelData.getTextureCoords(), pineModelData.getNormals(), pineModelData.getIndices());
-		ModelTexture pineTexture = new ModelTexture(loader.loadTexture("pineTexture"));
+		ModelTexture pineTexture = new ModelTexture(loader.loadTexture("textures/pineTexture"));
 		TexturedModel pineModel = new TexturedModel(pineRawModel, pineTexture);
-		for (int i = 0; i < 800; i++){
+		for (int i = 0; i < 1200; i++){
 			float x = random.nextFloat()*800;
 			float z = random.nextFloat()*800;
 			float y = terrain.getHeightOfTerrain(x, z);
@@ -88,11 +88,11 @@ public class MainGameLoop {
 			entities.add(new Entity(pineModel, new Vector3f(x,y,z),0,ry,0,1));
 		}
 		
-		ModelData cherryTreeModelData = OBJFileLoader.loadOBJ("cherryTreeModel");
+		ModelData cherryTreeModelData = OBJFileLoader.loadOBJ("obj/cherryTreeModel");
 		RawModel cherryTreeRawModel = loader.loadToVAO(cherryTreeModelData.getVertices(), cherryTreeModelData.getTextureCoords(), cherryTreeModelData.getNormals(), cherryTreeModelData.getIndices());
-		ModelTexture cherryTreeTexture = new ModelTexture(loader.loadTexture("cherryTreeTexture"));
+		ModelTexture cherryTreeTexture = new ModelTexture(loader.loadTexture("textures/cherryTreeTexture"));
 		TexturedModel cherryTreeModel = new TexturedModel(cherryTreeRawModel, cherryTreeTexture);
-		for (int i = 0; i < 200; i++){
+		for (int i = 0; i < 400; i++){
 			float x = random.nextFloat()*800;
 			float z = random.nextFloat()*800;
 			float y = terrain.getHeightOfTerrain(x, z);
@@ -100,9 +100,9 @@ public class MainGameLoop {
 			entities.add(new Entity(cherryTreeModel, new Vector3f(x,y,z),0,ry,0,2));
 		}
 		
-		ModelData grassModelData = OBJFileLoader.loadOBJ("grassModel");
+		ModelData grassModelData = OBJFileLoader.loadOBJ("obj/grassModel");
 		RawModel grassRawModel = loader.loadToVAO(grassModelData.getVertices(), grassModelData.getTextureCoords(), grassModelData.getNormals(), grassModelData.getIndices());
-		ModelTexture grassTexture = new ModelTexture(loader.loadTexture("grassTexture"));
+		ModelTexture grassTexture = new ModelTexture(loader.loadTexture("textures/grassTexture"));
 		grassTexture.setFakeLighting(true);
 		grassTexture.setTransparency(true);
 		TexturedModel grassModel = new TexturedModel(grassRawModel, grassTexture);
@@ -121,9 +121,9 @@ public class MainGameLoop {
 		lights.add(sun);
 		
 		// player
-		ModelData playerData = OBJFileLoader.loadOBJ("bunnyModel");
+		ModelData playerData = OBJFileLoader.loadOBJ("obj/bunnyModel");
 		RawModel playerRawModel = loader.loadToVAO(playerData.getVertices(), playerData.getTextureCoords(), playerData.getNormals(), playerData.getIndices());
-		ModelTexture playerTexture = new ModelTexture(loader.loadTexture("pathFloorTexture"));
+		ModelTexture playerTexture = new ModelTexture(loader.loadTexture("textures/pathFloorTexture"));
 		TexturedModel playerModel = new TexturedModel(playerRawModel, playerTexture);
 		Player player = new Player(playerModel, new Vector3f(400, 40, 400), 0, 0, 0, 1);
 		

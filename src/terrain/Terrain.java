@@ -45,7 +45,7 @@ public class Terrain {
 	private void loadHeightMap(String heightMapLocation, Loader loader){
 		heightMap = null;
 		try {
-			heightMap = ImageIO.read(new File("res/textures/"+ heightMapLocation +".png"));
+			heightMap = ImageIO.read(new File("res/maps/"+ heightMapLocation +".png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
