@@ -55,13 +55,6 @@ public class MainGameLoop {
 		sceneManager.addTerrain(terrain2);
 		
 		// entities
-		
-		ModelData stallModelData = OBJFileLoader.loadOBJ("obj/stallModel");
-		RawModel stallRawModel = loader.loadToVAO(stallModelData.getVertices(), stallModelData.getTextureCoords(), stallModelData.getNormals(), stallModelData.getIndices());
-		ModelTexture stallTexture = new ModelTexture(loader.loadTexture("textures/stallTexture"));
-		TexturedModel stallModel = new TexturedModel(stallRawModel, stallTexture);
-		sceneManager.addEntity(new Entity(stallModel, new Vector3f(0,0,-40),0,0,0,1.7f));
-
 		ModelData fernModelData = OBJFileLoader.loadOBJ("obj/fernModel");
 		RawModel fernRawModel = loader.loadToVAO(fernModelData.getVertices(), fernModelData.getTextureCoords(), fernModelData.getNormals(), fernModelData.getIndices());
 		ModelTexture fernTextureAtlas = new ModelTexture(loader.loadTexture("textures/fernTextureAtlas"));
@@ -108,8 +101,8 @@ public class MainGameLoop {
 		grassTexture.setTransparency(true);
 		TexturedModel grassModel = new TexturedModel(grassRawModel, grassTexture);
 		for (int i = 0; i < 200; i++){
-			float x = random.nextFloat()*800-400;
-			float z = random.nextFloat()*800-400;
+			float x = random.nextFloat()*800;
+			float z = random.nextFloat()*800;
 			float y = terrain1.getHeightOfTerrain(x, z);
 			float ry = random.nextFloat()*600;
 			sceneManager.addEntity(new Entity(grassModel, new Vector3f(x,y,z),0,ry,0,2));
