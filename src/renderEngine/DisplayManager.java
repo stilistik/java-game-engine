@@ -2,6 +2,7 @@ package renderEngine;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -17,15 +18,18 @@ public class DisplayManager {
 	private static long lastFrameTime;
 	private static float delta;
 	
+	private static boolean fullscreen = false;
+	
 	public static void createDisplay(){
-		ContextAttribs attribs = new ContextAttribs(3,2).withForwardCompatible(true).withProfileCore(true);
+		
 		try {
 			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
-			Display.create(new PixelFormat(), attribs);
+			Display.create();
+		
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
-		GL11.glViewport(0, 0, WIDTH, HEIGHT);
+		GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());
 		lastFrameTime = getCurrentTime();
 	}
 	
@@ -39,6 +43,28 @@ public class DisplayManager {
 	
 	public static void closeDisplay(){
 		Display.destroy();
+	}
+	
+	public static void setFullScreen(){
+		try {
+			DisplayMode[] modes = Display.getAvailableDisplayModes();
+			System.out.println(modes.length);
+			Display.setDisplayMode(modes[20]);
+			Display.setFullscreen(true);
+			GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());
+		} catch (LWJGLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void exitFullScreen(){
+		try {
+			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
+			Display.setFullscreen(false);
+			GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());
+		} catch (LWJGLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private static long getCurrentTime(){

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
@@ -37,12 +38,19 @@ public class MainGameLoop {
 		Random random = new Random();
 		
 		// terrain
-		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassFloorTexture"));
-		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("mudFloorTexture"));
-		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("flowerFloorTexture"));
-		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("mossPathTexture"));
-		TerrainTexturePack ttp = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
-		Terrain terrain = new Terrain(0, 0, loader, ttp, "texMap_c", "heightMap");		
+		List<TerrainTexture> terrainTextures = new ArrayList<TerrainTexture>();
+		List<TerrainTexture> terrainTextureMaps = new ArrayList<TerrainTexture>();
+		terrainTextures.add(new TerrainTexture(loader.loadTexture("grassFloorTexture")));
+		terrainTextures.add(new TerrainTexture(loader.loadTexture("mudFloorTexture")));
+		terrainTextures.add(new TerrainTexture(loader.loadTexture("flowerFloorTexture")));
+		terrainTextures.add(new TerrainTexture(loader.loadTexture("mossPathTexture")));
+		terrainTextureMaps.add(new TerrainTexture(loader.loadTexture("texMap_c0")));
+		terrainTextureMaps.add(new TerrainTexture(loader.loadTexture("texMap_c1")));
+		terrainTextureMaps.add(new TerrainTexture(loader.loadTexture("texMap_c2")));
+		terrainTextureMaps.add(new TerrainTexture(loader.loadTexture("texMap_c3")));
+
+		TerrainTexturePack ttp = new TerrainTexturePack(terrainTextures, terrainTextureMaps);
+		Terrain terrain = new Terrain(0, 0, loader, ttp, "heightMap");		
 		
 		// entities
 		List<Entity> entities = new ArrayList<Entity>();

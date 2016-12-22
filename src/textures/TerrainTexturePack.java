@@ -1,29 +1,37 @@
 package textures;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import terrain.Terrain;
+
 public class TerrainTexturePack {
 	
-	private TerrainTexture backgroundTexture;
-	private TerrainTexture rTexture;
-	private TerrainTexture gTexture;
-	private TerrainTexture bTexture;
+	private static final int MAX_TEXTURES = 8;
+	private int nTextures;
 	
-	public TerrainTexturePack(TerrainTexture backgroundTexture, TerrainTexture rTexture, TerrainTexture gTexture, TerrainTexture bTexture) {
-		this.backgroundTexture = backgroundTexture;
-		this.rTexture = rTexture;
-		this.gTexture = gTexture;
-		this.bTexture = bTexture;
+	private TerrainTexture textures[];
+	private TerrainTexture textureMaps[];
+	
+	public TerrainTexturePack(List<TerrainTexture> t, List<TerrainTexture> tm) {
+		nTextures = t.size();
+		textures = new TerrainTexture[MAX_TEXTURES];
+		textureMaps = new TerrainTexture[MAX_TEXTURES];
+		for (int i = 0; i < t.size(); i++){
+			textures[i] = t.get(i);
+			textureMaps[i] = tm.get(i);
+		}
 	}
 	
-	public TerrainTexture getBackgroundTexture() {
-		return backgroundTexture;
+	public TerrainTexture getTexture(int idx) {
+		return textures[idx];
 	}
-	public TerrainTexture getrTexture() {
-		return rTexture;
+	
+	public TerrainTexture getTextureMap(int idx){
+		return textureMaps[idx];
 	}
-	public TerrainTexture getgTexture() {
-		return gTexture;
-	}
-	public TerrainTexture getbTexture() {
-		return bTexture;
+	
+	public int getNumberOfTextures(){
+		return nTextures;
 	}
 }

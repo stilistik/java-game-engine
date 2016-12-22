@@ -1,6 +1,7 @@
 package terrain;
 
 import java.util.List;
+import java.util.function.LongConsumer;
 
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
@@ -26,6 +27,7 @@ public class TerrainShader extends ShaderProgram {
 	private int location_shineDamper;
 	private int location_reflectivity;
 	private int location_skyColor;
+	private int location_nTextures;
 	private int location_textures[];
 	private int location_textureMaps[];
 	
@@ -56,6 +58,7 @@ public class TerrainShader extends ShaderProgram {
 			location_lightColor[i] = super.getUniformLocation("lightColor[" + i + "]");
 		}
 		
+		location_nTextures = super.getUniformLocation("nTextures");
 		location_textures = new int[MAX_TEXTURES];
 		location_textureMaps = new int[MAX_TEXTURES];
 		for (int i = 0; i < MAX_TEXTURES; i++){
@@ -71,6 +74,10 @@ public class TerrainShader extends ShaderProgram {
 		for (int i = 0; i < MAX_TEXTURES; i++){
 			super.loadInt(location_textureMaps[i], MAX_TEXTURES+i);
 		}
+	}
+	
+	public void loadNumberOfTextures(int n){
+		super.loadInt(location_nTextures, n);
 	}
 	
 	public void loadSkyColor(float r, float g, float b){

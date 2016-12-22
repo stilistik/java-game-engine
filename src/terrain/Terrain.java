@@ -31,33 +31,21 @@ public class Terrain {
 	private TerrainTexturePack texturePack;
 	
 	private BufferedImage heightMap;
-	private BufferedImage textureMaps[];
-	private TerrainTexture blendTextures[];
 	
 	private float[][] heights;
 	
-	public Terrain(int gridX, int gridZ, Loader loader, TerrainTexturePack texturePack, String blendMapLocation, String heightMapLocation){
-		loadMaps(heightMapLocation, blendMapLocation, loader);
+	public Terrain(int gridX, int gridZ, Loader loader, TerrainTexturePack texturePack, String heightMapLocation){
+		loadHeightMap(heightMapLocation, loader);
 		this.texturePack = texturePack;
 		this.x = gridX * SIZE;
 		this.z = gridZ * SIZE;
 		this.model = generateTerrain(loader, heightMapLocation);		
 	}
 	
-	private void loadMaps(String heightMapLocation, String blendMapLocation, Loader loader){
+	private void loadHeightMap(String heightMapLocation, Loader loader){
 		heightMap = null;
 		try {
 			heightMap = ImageIO.read(new File("res/textures/"+ heightMapLocation +".png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		textureMaps = new BufferedImage[MAX_TEXTURES];
-		blendTextures = new TerrainTexture[MAX_TEXTURES];
-		try {
-			for (int i = 0; i < MAX_TEXTURES; i++){
-				textureMaps[i] = ImageIO.read(new File("res/textures/" + blendMapLocation + i + ".png"));
-				blendTextures[i] = new TerrainTexture(loader.loadTexture(blendMapLocation + i));
-			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -165,9 +153,5 @@ public class Terrain {
 
 	public TerrainTexturePack getTexturePack() {
 		return texturePack;
-	}
-
-	public TerrainTexture getBlendTexture(int index) {
-		return blendTextures[index];
 	}
 }

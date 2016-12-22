@@ -49,22 +49,19 @@ public class TerrainRenderer {
 	
 	private void bindTextures(Terrain terrain){
 		TerrainTexturePack texturePack = terrain.getTexturePack();
-		GL13.glActiveTexture(GL13.GL_TEXTURE0);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texturePack.getBackgroundTexture().getID());
-		GL13.glActiveTexture(GL13.GL_TEXTURE1);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texturePack.getrTexture().getID());
-		GL13.glActiveTexture(GL13.GL_TEXTURE2);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texturePack.getgTexture().getID());
-		GL13.glActiveTexture(GL13.GL_TEXTURE3);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texturePack.getbTexture().getID());
-		GL13.glActiveTexture(GL13.GL_TEXTURE4);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, terrain.getBlendTexture(0).getID());
-		GL13.glActiveTexture(GL13.GL_TEXTURE5);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, terrain.getBlendTexture(1).getID());
-		GL13.glActiveTexture(GL13.GL_TEXTURE6);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, terrain.getBlendTexture(2).getID());
-		GL13.glActiveTexture(GL13.GL_TEXTURE7);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, terrain.getBlendTexture(3).getID());
+		int nTextures = texturePack.getNumberOfTextures();
+		shader.loadNumberOfTextures(nTextures);
+		int tex_index = 0;
+		for (int i = 0; i < nTextures; i++){
+			GL13.glActiveTexture(GL13.GL_TEXTURE0 + tex_index);
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, texturePack.getTexture(i).getID());
+			tex_index++;
+		}
+		for (int i = 0; i < nTextures; i++){
+			GL13.glActiveTexture(GL13.GL_TEXTURE0 + tex_index);
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, texturePack.getTextureMap(i).getID());
+			tex_index++;
+		}
 	}
 	
 	private void unbindTexturedModel(){
