@@ -33,8 +33,7 @@ public class MainGameLoop {
 		DisplayManager.createDisplay();
 		DisplayManager.setFullScreen();
 		Loader loader = new Loader();
-		SceneManager sceneManager = new SceneManager();
-		MasterRenderer renderer = new MasterRenderer();
+		SceneManager sceneManager = new SceneManager(loader);
 		Random random = new Random();
 		
 		// terrain

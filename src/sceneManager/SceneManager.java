@@ -12,6 +12,7 @@ import entities.Entity;
 import entities.EntityShader;
 import entities.Light;
 import entities.Player;
+import renderEngine.Loader;
 import renderEngine.MasterRenderer;
 import terrain.Terrain;
 
@@ -20,7 +21,7 @@ public class SceneManager {
 	Player player;
 	Camera camera;
 	
-	MasterRenderer renderer = new MasterRenderer();
+	MasterRenderer renderer;
 	
 	private List<Entity> entities = new ArrayList<Entity>();
 	private List<Light> lights = new ArrayList<Light>();
@@ -28,7 +29,9 @@ public class SceneManager {
 	
 	private int currentTerrainIndex = 0;
 	
-	public SceneManager(){}
+	public SceneManager(Loader loader){
+		renderer = new MasterRenderer(loader);
+	}
 	
 	public void update(){
 		getCurrentTerrain();
@@ -97,7 +100,4 @@ public class SceneManager {
 	public void addTerrain(Terrain terrain){
 		terrains.add(terrain);
 	}
-	
-
-
 }
