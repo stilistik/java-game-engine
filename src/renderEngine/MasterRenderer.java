@@ -32,7 +32,7 @@ public class MasterRenderer {
 	
 	private Matrix4f projectionMatrix;
 	
-	private EntityShader staticShader;
+	private EntityShader entityShader;
 	private EntityRenderer entityRenderer;
 
 	private TerrainShader terrainShader;
@@ -44,23 +44,23 @@ public class MasterRenderer {
 	public MasterRenderer(){
 		enableCulling();
 		createProjectionMatrix();
-		staticShader = new EntityShader();
-		entityRenderer = new EntityRenderer(staticShader, projectionMatrix);
+		entityShader = new EntityShader();
+		entityRenderer = new EntityRenderer(entityShader, projectionMatrix);
 		terrainShader = new TerrainShader();
 		terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
 	}
 	
-	public void render(Light sun, Camera camera){
+	public void render(List<Light> lights, Camera camera){
 		prepare();
-		staticShader.start();
-		staticShader.loadSkyColor(RED, GREEN, BLUE);
-		staticShader.loadLight(sun);
-		staticShader.loadViewMatrix(camera);
+		entityShader.start();
+		entityShader.loadSkyColor(RED, GREEN, BLUE);
+		entityShader.loadLights(lights);
+		entityShader.loadViewMatrix(camera);
 		entityRenderer.render(entities);
-		staticShader.stop();
+		entityShader.stop();
 		terrainShader.start();
 		terrainShader.loadSkyColor(RED, GREEN, BLUE);
-		terrainShader.loadLight(sun);
+		terrainShader.loadLights(lights);
 		terrainShader.loadViewMatrix(camera);
 		terrainRenderer.render(terrains);
 		terrainShader.stop();
@@ -115,7 +115,7 @@ public class MasterRenderer {
 	}
 	
 	public void cleanUp(){
-		staticShader.cleanUp();
+		entityShader.cleanUp();
 		terrainShader.cleanUp();
 	}
 

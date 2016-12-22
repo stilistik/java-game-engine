@@ -40,7 +40,7 @@ public class MainGameLoop {
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassFloorTexture"));
 		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("mudFloorTexture"));
 		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("flowerFloorTexture"));
-		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("pathFloorTexture"));
+		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("mossPathTexture"));
 		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
 		TerrainTexturePack ttp = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
 		Terrain terrain = new Terrain(0, 0, loader, ttp, blendMap, "heightMap");		
@@ -73,12 +73,24 @@ public class MainGameLoop {
 		RawModel pineRawModel = loader.loadToVAO(pineModelData.getVertices(), pineModelData.getTextureCoords(), pineModelData.getNormals(), pineModelData.getIndices());
 		ModelTexture pineTexture = new ModelTexture(loader.loadTexture("pineTexture"));
 		TexturedModel pineModel = new TexturedModel(pineRawModel, pineTexture);
-		for (int i = 0; i < 600; i++){
+		for (int i = 0; i < 800; i++){
 			float x = random.nextFloat()*800;
 			float z = random.nextFloat()*800;
 			float y = terrain.getHeightOfTerrain(x, z);
 			float ry = random.nextFloat()*600;
 			entities.add(new Entity(pineModel, new Vector3f(x,y,z),0,ry,0,1));
+		}
+		
+		ModelData cherryTreeModelData = OBJFileLoader.loadOBJ("cherryTreeModel");
+		RawModel cherryTreeRawModel = loader.loadToVAO(cherryTreeModelData.getVertices(), cherryTreeModelData.getTextureCoords(), cherryTreeModelData.getNormals(), cherryTreeModelData.getIndices());
+		ModelTexture cherryTreeTexture = new ModelTexture(loader.loadTexture("cherryTreeTexture"));
+		TexturedModel cherryTreeModel = new TexturedModel(cherryTreeRawModel, cherryTreeTexture);
+		for (int i = 0; i < 200; i++){
+			float x = random.nextFloat()*800;
+			float z = random.nextFloat()*800;
+			float y = terrain.getHeightOfTerrain(x, z);
+			float ry = random.nextFloat()*600;
+			entities.add(new Entity(cherryTreeModel, new Vector3f(x,y,z),0,ry,0,2));
 		}
 		
 		ModelData grassModelData = OBJFileLoader.loadOBJ("grassModel");
@@ -96,7 +108,10 @@ public class MainGameLoop {
 		}
 		
 		// light
-		Light sun = new Light(new Vector3f(0,1000,1000), new Vector3f(1,1,1));
+		Light sun = new Light(new Vector3f(0,1000,1000), new Vector3f(1.4f,1,1));
+
+		List<Light> lights = new ArrayList<Light>();
+		lights.add(sun);
 		
 		// player
 		ModelData playerData = OBJFileLoader.loadOBJ("bunnyModel");
@@ -116,7 +131,7 @@ public class MainGameLoop {
 			for (Entity e : entities){
 				renderer.processEntity(e);
 			}
-			renderer.render(sun, camera);
+			renderer.render(lights, camera);
 			DisplayManager.updateDisplay();
 		}		
 		loader.cleanUp();

@@ -14,3 +14,13 @@ Features:
 	-3rd person camera
 	-texture atlases
 	-gui rendering system
+	-multiple light support
+	
+Next:
+	-material based multishader support
+	-gui manager & gui interaction
+	-scene manager
+	-water rendering system
+	-mouse picker
+	-terrain shaping
+	
