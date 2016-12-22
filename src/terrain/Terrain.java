@@ -18,6 +18,8 @@ import toolBox.Maths;
 
 public class Terrain {
 	
+	public static final int MAX_TEXTURES = 4;
+	
 	private static final float SIZE = 800;
 	private static final float MAX_HEIGHT = 40;
 	private static final float MAX_PIXEL_COLOUR = 256 * 256 * 256;
@@ -27,32 +29,35 @@ public class Terrain {
 	
 	private RawModel model;
 	private TerrainTexturePack texturePack;
-	private TerrainTexture blendMapTexture;
 	
 	private BufferedImage heightMap;
-	private BufferedImage blendMap;
+	private BufferedImage textureMaps[];
+	private TerrainTexture blendTextures[];
 	
 	private float[][] heights;
 	
 	public Terrain(int gridX, int gridZ, Loader loader, TerrainTexturePack texturePack, String blendMapLocation, String heightMapLocation){
-		loadMaps(heightMapLocation, blendMapLocation);
-		this.blendMapTexture = new TerrainTexture(loader.loadTexture(blendMapLocation));
+		loadMaps(heightMapLocation, blendMapLocation, loader);
 		this.texturePack = texturePack;
 		this.x = gridX * SIZE;
 		this.z = gridZ * SIZE;
 		this.model = generateTerrain(loader, heightMapLocation);		
 	}
 	
-	private void loadMaps(String heightMapLocation, String blendMapLocation){
+	private void loadMaps(String heightMapLocation, String blendMapLocation, Loader loader){
 		heightMap = null;
 		try {
 			heightMap = ImageIO.read(new File("res/textures/"+ heightMapLocation +".png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		blendMap = null;
+		textureMaps = new BufferedImage[MAX_TEXTURES];
+		blendTextures = new TerrainTexture[MAX_TEXTURES];
 		try {
-			blendMap = ImageIO.read(new File("res/textures/"+ blendMapLocation +".png"));
+			for (int i = 0; i < MAX_TEXTURES; i++){
+				textureMaps[i] = ImageIO.read(new File("res/textures/" + blendMapLocation + i + ".png"));
+				blendTextures[i] = new TerrainTexture(loader.loadTexture(blendMapLocation + i));
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -162,7 +167,7 @@ public class Terrain {
 		return texturePack;
 	}
 
-	public TerrainTexture getBlendMapTexture() {
-		return blendMapTexture;
+	public TerrainTexture getBlendTexture(int index) {
+		return blendTextures[index];
 	}
 }

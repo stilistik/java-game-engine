@@ -8,11 +8,8 @@ in float visibility;
 
 out vec4 out_color;
 
-uniform sampler2D backgroundTexture;
-uniform sampler2D rTexture;
-uniform sampler2D gTexture;
-uniform sampler2D bTexture;
-uniform sampler2D blendMap;
+uniform sampler2D textures[4];
+uniform sampler2D textureMaps[4];
 
 
 uniform vec3 lightColor[6];
@@ -22,15 +19,15 @@ uniform vec3 skyColor;
 
 void main(void){
 
-	vec4 blendMapColor = texture(blendMap, pass_textureCoords);
-	float backgroundAmount = 1 - (blendMapColor.r + blendMapColor.g + blendMapColor.b);
 	vec2 tiledTexCoords = pass_textureCoords * 40.0;
-	vec4 backgroundTextureColor = texture(backgroundTexture, tiledTexCoords) * backgroundAmount;
-	vec4 rTextureColor = texture(rTexture, tiledTexCoords) * blendMapColor.r;
-	vec4 gTextureColor = texture(gTexture, tiledTexCoords) * blendMapColor.g;
-	vec4 bTextureColor = texture(bTexture, tiledTexCoords) * blendMapColor.b;
-	vec4 totalColor = backgroundTextureColor + rTextureColor + gTextureColor + bTextureColor;
+	vec4 totalColor = vec4(0.0);
 	
+	for (int i = 0; i < 4; i++){
+		vec4 mapColor = texture(textureMaps[i], pass_textureCoords);
+		float amount = mapColor.r;
+		vec4 color = texture(textures[i], tiledTexCoords) * amount;
+		totalColor = totalColor + color;
+	}
 
 	vec3 unitNormal = normalize(surfaceNormal);
 	vec3 unitToCameraVector = normalize(toCameraVector);

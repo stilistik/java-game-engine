@@ -16,6 +16,7 @@ public class TerrainShader extends ShaderProgram {
 	private static final String FRAGMENT_FILE = "src/shaders/terrainFragmentShader.txt";
 	
 	private static final int MAX_LIGHTS = 6;
+	private static final int MAX_TEXTURES = 4;
 	
 	private int location_transformationMatrix;
 	private int location_projectionMatrix;
@@ -25,11 +26,8 @@ public class TerrainShader extends ShaderProgram {
 	private int location_shineDamper;
 	private int location_reflectivity;
 	private int location_skyColor;
-	private int location_backgroundTexture;
-	private int location_rTexture;
-	private int location_gTexture;
-	private int location_bTexture;
-	private int location_blendMap;
+	private int location_textures[];
+	private int location_textureMaps[];
 	
 	public TerrainShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
@@ -50,11 +48,6 @@ public class TerrainShader extends ShaderProgram {
 		location_shineDamper = super.getUniformLocation("shineDamper");
 		location_reflectivity = super.getUniformLocation("reflectivity");
 		location_skyColor = super.getUniformLocation("skyColor");
-		location_backgroundTexture = super.getUniformLocation("backgroundTexture");
-		location_rTexture = super.getUniformLocation("rTexture");
-		location_gTexture = super.getUniformLocation("gTexture");
-		location_bTexture = super.getUniformLocation("bTexture");
-		location_blendMap = super.getUniformLocation("blendMap");
 		
 		location_lightPosition = new int[MAX_LIGHTS];
 		location_lightColor = new int[MAX_LIGHTS];
@@ -62,14 +55,22 @@ public class TerrainShader extends ShaderProgram {
 			location_lightPosition[i] = super.getUniformLocation("lightPosition[" + i + "]");
 			location_lightColor[i] = super.getUniformLocation("lightColor[" + i + "]");
 		}
+		
+		location_textures = new int[MAX_TEXTURES];
+		location_textureMaps = new int[MAX_TEXTURES];
+		for (int i = 0; i < MAX_TEXTURES; i++){
+			location_textures[i] = super.getUniformLocation("textures[" + i + "]");
+			location_textureMaps[i] = super.getUniformLocation("textureMaps[" + i + "]");
+		}
 	}	
 
 	public void connectTextureUnits(){
-		super.loadInt(location_backgroundTexture, 0);
-		super.loadInt(location_rTexture, 1);
-		super.loadInt(location_gTexture, 2);
-		super.loadInt(location_bTexture, 3);
-		super.loadInt(location_blendMap, 4);		
+		for (int i = 0; i < MAX_TEXTURES; i++){
+			super.loadInt(location_textures[i], i);
+		}
+		for (int i = 0; i < MAX_TEXTURES; i++){
+			super.loadInt(location_textureMaps[i], MAX_TEXTURES+i);
+		}
 	}
 	
 	public void loadSkyColor(float r, float g, float b){
