@@ -26,8 +26,8 @@ public class MasterRenderer {
 	private static final float NEAR_PLANE = 0.1f;
 	private static final float FAR_PLANE = 1000;
 	
-	private static final float RED = 0.52f;
-	private static final float GREEN =  0.6f; 
+	private static final float RED = 0.5f;
+	private static final float GREEN =  0.62f; 
 	private static final float BLUE = 0.7f;
 
 	
@@ -68,7 +68,7 @@ public class MasterRenderer {
 		terrainShader.loadViewMatrix(camera);
 		terrainRenderer.render(terrains);
 		terrainShader.stop();
-		skyboxRenderer.render(camera);
+		skyboxRenderer.render(camera, RED, GREEN, BLUE);
 		entities.clear();
 		terrains.clear();
 	}

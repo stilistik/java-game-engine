@@ -14,6 +14,7 @@ import entities.Entity;
 import entities.Light;
 import entities.Player;
 import gameState.GameStateManager;
+import gameState.GameStateManager.GameState;
 import models.RawModel;
 import models.TexturedModel;
 import objParser.ModelData;
@@ -124,7 +125,8 @@ public class MainGameLoop {
 		Camera camera = new Camera(player);	
 		sceneManager.setCamera(camera);
 		
-		while(!Display.isCloseRequested()){
+		while(GameStateManager.getCurrentState() != GameState.CLOSE_REQUESTED){
+			GameStateManager.update();
 			sceneManager.update();
 			sceneManager.renderScene();
 			DisplayManager.updateDisplay();
