@@ -10,11 +10,12 @@ import org.lwjgl.util.vector.Vector3f;
 
 import entities.Camera;
 import entities.Entity;
-
+import entities.Lamp;
 import entities.Light;
 import entities.Player;
 import gameState.GameStateManager;
 import gameState.GameStateManager.GameState;
+import models.ModelCreator;
 import models.RawModel;
 import models.TexturedModel;
 import objParser.ModelData;
@@ -34,6 +35,7 @@ public class MainGameLoop {
 		DisplayManager.createDisplay();
 		DisplayManager.setFullScreen();
 		Loader loader = new Loader();
+		ModelCreator modelCreator = new ModelCreator(loader);
 		SceneManager sceneManager = new SceneManager(loader);
 		Random random = new Random();
 		
@@ -56,13 +58,10 @@ public class MainGameLoop {
 		sceneManager.addTerrain(terrain2);
 		
 		// entities
-		ModelData fernModelData = OBJFileLoader.loadOBJ("obj/fernModel");
-		RawModel fernRawModel = loader.loadToVAO(fernModelData.getVertices(), fernModelData.getTextureCoords(), fernModelData.getNormals(), fernModelData.getIndices());
-		ModelTexture fernTextureAtlas = new ModelTexture(loader.loadTexture("textures/fernTextureAtlas"));
-		fernTextureAtlas.setFakeLighting(true);
-		fernTextureAtlas.setTransparency(true);
-		fernTextureAtlas.setAtlasDimension(2);
-		TexturedModel fernModel = new TexturedModel(fernRawModel, fernTextureAtlas);
+		TexturedModel fernModel = modelCreator.createModel("obj/fernModel", "textures/fernTextureAtlas");
+		fernModel.getTexture().setFakeLighting(true);
+		fernModel.getTexture().setTransparency(true);
+		fernModel.getTexture().setAtlasDimension(2);
 		for (int i = 0; i < 600; i++){
 			float x = random.nextFloat()*800;
 			float z = random.nextFloat()*800;
@@ -71,10 +70,7 @@ public class MainGameLoop {
 			sceneManager.addEntity(new Entity(fernModel, random.nextInt(4), new Vector3f(x,y,z),0,ry,0,1));
 		}
 		
-		ModelData pineModelData = OBJFileLoader.loadOBJ("obj/pineModel");
-		RawModel pineRawModel = loader.loadToVAO(pineModelData.getVertices(), pineModelData.getTextureCoords(), pineModelData.getNormals(), pineModelData.getIndices());
-		ModelTexture pineTexture = new ModelTexture(loader.loadTexture("textures/pineTexture"));
-		TexturedModel pineModel = new TexturedModel(pineRawModel, pineTexture);
+		TexturedModel pineModel = modelCreator.createModel("obj/pineModel", "textures/pinetexture");
 		for (int i = 0; i < 1200; i++){
 			float x = random.nextFloat()*800;
 			float z = random.nextFloat()*800;
@@ -83,10 +79,8 @@ public class MainGameLoop {
 			sceneManager.addEntity(new Entity(pineModel, new Vector3f(x,y,z),0,ry,0,1));
 		}
 		
-		ModelData cherryTreeModelData = OBJFileLoader.loadOBJ("obj/cherryTreeModel");
-		RawModel cherryTreeRawModel = loader.loadToVAO(cherryTreeModelData.getVertices(), cherryTreeModelData.getTextureCoords(), cherryTreeModelData.getNormals(), cherryTreeModelData.getIndices());
-		ModelTexture cherryTreeTexture = new ModelTexture(loader.loadTexture("textures/cherryTreeTexture"));
-		TexturedModel cherryTreeModel = new TexturedModel(cherryTreeRawModel, cherryTreeTexture);
+		
+		TexturedModel cherryTreeModel = modelCreator.createModel("obj/cherryTreeModel", "textures/cherryTreeTexture");
 		for (int i = 0; i < 400; i++){
 			float x = random.nextFloat()*800;
 			float z = random.nextFloat()*800;
@@ -95,12 +89,9 @@ public class MainGameLoop {
 			sceneManager.addEntity(new Entity(cherryTreeModel, new Vector3f(x,y,z),0,ry,0,2));
 		}
 		
-		ModelData grassModelData = OBJFileLoader.loadOBJ("obj/grassModel");
-		RawModel grassRawModel = loader.loadToVAO(grassModelData.getVertices(), grassModelData.getTextureCoords(), grassModelData.getNormals(), grassModelData.getIndices());
-		ModelTexture grassTexture = new ModelTexture(loader.loadTexture("textures/grassTexture"));
-		grassTexture.setFakeLighting(true);
-		grassTexture.setTransparency(true);
-		TexturedModel grassModel = new TexturedModel(grassRawModel, grassTexture);
+		TexturedModel grassModel = modelCreator.createModel("obj/grassModel", "textures/grassTexture");
+		grassModel.getTexture().setTransparency(true);
+		grassModel.getTexture().setFakeLighting(true);
 		for (int i = 0; i < 200; i++){
 			float x = random.nextFloat()*800;
 			float z = random.nextFloat()*800;
@@ -108,16 +99,28 @@ public class MainGameLoop {
 			float ry = random.nextFloat()*600;
 			sceneManager.addEntity(new Entity(grassModel, new Vector3f(x,y,z),0,ry,0,2));
 		}
+	
 		
 		// light
 		Light sun = new Light(new Vector3f(0,1000,1000), new Vector3f(1.4f,1,1));
-		sceneManager.addLight(sun);
+//		sceneManager.addLight(sun);
+		
+		TexturedModel lampModel = modelCreator.createModel("obj/lampModel", "textures/lampTexture");
+		lampModel.getTexture().setFakeLighting(true);
+		Lamp lamp1 = new Lamp(lampModel, new Vector3f(400, -7, 400), 0, 0, 0, 1, new Vector3f(2,0,0), new Vector3f(1, 0.01f, 0.002f), 13);
+		Lamp lamp2 = new Lamp(lampModel, new Vector3f(430, -9, 430), 0, 0, 0, 1, new Vector3f(0,2,0), new Vector3f(1, 0.01f, 0.002f), 13);
+		Lamp lamp3 = new Lamp(lampModel, new Vector3f(370, -1, 370), 0, 0, 0, 1, new Vector3f(1,1,1), new Vector3f(1, 0.01f, 0.002f), 13);
+
+		sceneManager.addLight(lamp1.getLight());
+		sceneManager.addLight(lamp2.getLight());
+		sceneManager.addLight(lamp3.getLight());
+		sceneManager.addEntity(lamp1);
+		sceneManager.addEntity(lamp2);
+		sceneManager.addEntity(lamp3);
+
 		
 		// player
-		ModelData playerData = OBJFileLoader.loadOBJ("obj/bunnyModel");
-		RawModel playerRawModel = loader.loadToVAO(playerData.getVertices(), playerData.getTextureCoords(), playerData.getNormals(), playerData.getIndices());
-		ModelTexture playerTexture = new ModelTexture(loader.loadTexture("textures/pathFloorTexture"));
-		TexturedModel playerModel = new TexturedModel(playerRawModel, playerTexture);
+		TexturedModel playerModel = modelCreator.createModel("obj/bunnyModel", "textures/pathFloorTexture");
 		Player player = new Player(playerModel, new Vector3f(400, 40, 400), 0, 0, 0, 0.7f);
 		sceneManager.setPlayer(player);
 		
