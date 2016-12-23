@@ -12,6 +12,7 @@ import entities.Entity;
 import entities.EntityShader;
 import entities.Light;
 import entities.Player;
+import entities.Sun;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
 import terrain.Terrain;
@@ -57,7 +58,7 @@ public class SceneManager {
 			Vector3f.sub(light.getPosition(), player.getPosition(), v);
 			light.setDistanceToPlayer(v.length());
 		}
-		lights.sort(new DistanceSort());		
+		lights.sort(new DistanceSort());	
 	}
 	
 	class DistanceSort implements Comparator<Light>

@@ -13,6 +13,7 @@ import entities.Entity;
 import entities.Lamp;
 import entities.Light;
 import entities.Player;
+import entities.Sun;
 import gameState.GameStateManager;
 import gameState.GameStateManager.GameState;
 import models.ModelCreator;
@@ -102,22 +103,26 @@ public class MainGameLoop {
 	
 		
 		// light
-		Light sun = new Light(new Vector3f(0,1000,1000), new Vector3f(1.4f,1,1));
+		Sun sun = new Sun(new Vector3f(0,1000,1000), new Vector3f(1.4f,1,1));
 //		sceneManager.addLight(sun);
 		
 		TexturedModel lampModel = modelCreator.createModel("obj/lampModel", "textures/lampTexture");
 		lampModel.getTexture().setFakeLighting(true);
-		Lamp lamp1 = new Lamp(lampModel, new Vector3f(400, -7, 400), 0, 0, 0, 1, new Vector3f(2,0,0), new Vector3f(1, 0.01f, 0.002f), 13);
-		Lamp lamp2 = new Lamp(lampModel, new Vector3f(430, -9, 430), 0, 0, 0, 1, new Vector3f(0,2,0), new Vector3f(1, 0.01f, 0.002f), 13);
-		Lamp lamp3 = new Lamp(lampModel, new Vector3f(370, -1, 370), 0, 0, 0, 1, new Vector3f(1,1,1), new Vector3f(1, 0.01f, 0.002f), 13);
-
-		sceneManager.addLight(lamp1.getLight());
-		sceneManager.addLight(lamp2.getLight());
-		sceneManager.addLight(lamp3.getLight());
-		sceneManager.addEntity(lamp1);
-		sceneManager.addEntity(lamp2);
-		sceneManager.addEntity(lamp3);
-
+		for (int i = 0; i < 50; i++){
+			float x = random.nextFloat()*800;
+			float z = random.nextFloat()*800;
+			float y = terrain1.getHeightOfTerrain(x, z);
+			float ry = random.nextFloat()*600;
+			float r = random.nextFloat()*2;
+			float g = random.nextFloat()*2;
+			float b = random.nextFloat()*2;
+			if (r == 0 && g == 0 && b == 0){
+				r = 2;
+			}
+			Lamp lamp = new Lamp(lampModel, new Vector3f(x, y, z), 0, ry, 0, 1, new Vector3f(r,g,b), new Vector3f(1, 0.01f, 0.002f), 13);
+			sceneManager.addEntity(lamp);
+			sceneManager.addLight(lamp.getLight());
+		}
 		
 		// player
 		TexturedModel playerModel = modelCreator.createModel("obj/bunnyModel", "textures/pathFloorTexture");
