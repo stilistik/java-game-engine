@@ -80,7 +80,6 @@ public class MainGameLoop {
 			sceneManager.addEntity(new Entity(pineModel, new Vector3f(x,y,z),0,ry,0,1));
 		}
 		
-		
 		TexturedModel cherryTreeModel = modelCreator.createModel("obj/cherryTreeModel", "textures/cherryTreeTexture");
 		for (int i = 0; i < 400; i++){
 			float x = random.nextFloat()*800;
@@ -104,7 +103,7 @@ public class MainGameLoop {
 		
 		// light
 		Sun sun = new Sun(new Vector3f(0,1000,1000), new Vector3f(1.4f,1,1));
-//		sceneManager.addLight(sun);
+		sceneManager.addLight(sun);
 		
 		TexturedModel lampModel = modelCreator.createModel("obj/lampModel", "textures/lampTexture");
 		lampModel.getTexture().setFakeLighting(true);

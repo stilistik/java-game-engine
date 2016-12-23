@@ -62,7 +62,7 @@ public class Camera {
 			float dAngle = Mouse.getDX() * MOUSE_SENSITIVITY;
 			angleAroundPlayer -= dAngle;
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_W) || Keyboard.isKeyDown(Keyboard.KEY_S)){
+		if(Keyboard.isKeyDown(Keyboard.KEY_W) && !Mouse.isButtonDown(0) || Keyboard.isKeyDown(Keyboard.KEY_S) && !Mouse.isButtonDown(0)){
 			if (angleAroundPlayer > 0)
 				angleAroundPlayer -= ANGLE_RESET_SPEED;
 			if (angleAroundPlayer < 0){
