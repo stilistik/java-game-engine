@@ -8,7 +8,6 @@ public class RawModel {
 	
 	private int vaoID;
 	private int vertexCount;
-	private List<Vector3f> boundingBox;
 	
 	public RawModel(int vaoID, int vertexCount){
 		this.vaoID = vaoID;
@@ -22,8 +21,4 @@ public class RawModel {
 	public int getVertexCount() {
 		return vertexCount;
 	}	
-	
-	public List<Vector3f> getBoundingBox(){
-		return boundingBox;
-	}
 }

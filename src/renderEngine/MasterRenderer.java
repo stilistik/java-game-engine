@@ -16,6 +16,7 @@ import entities.EntityShader;
 import entities.Light;
 import models.TexturedModel;
 import skybox.SkyboxRenderer;
+import skybox.SkyboxShader;
 import terrain.Terrain;
 import terrain.TerrainRenderer;
 import terrain.TerrainShader;
@@ -42,6 +43,7 @@ public class MasterRenderer {
 	private TerrainRenderer terrainRenderer;
 	
 	private SkyboxRenderer skyboxRenderer;
+	private SkyboxShader skyboxShader;
 	
 	private Map<TexturedModel, List<Entity>> entities = new HashMap<TexturedModel, List<Entity>>();
 	private List<Terrain> terrains = new ArrayList<Terrain>();
@@ -53,7 +55,8 @@ public class MasterRenderer {
 		entityRenderer = new EntityRenderer(entityShader, projectionMatrix);
 		terrainShader = new TerrainShader();
 		terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
-		skyboxRenderer = new SkyboxRenderer(loader, projectionMatrix);
+		skyboxShader = new SkyboxShader();
+		skyboxRenderer = new SkyboxRenderer(skyboxShader, loader, projectionMatrix);
 	}
 	
 	public void render(List<Light> lights, Camera camera){
@@ -124,6 +127,7 @@ public class MasterRenderer {
 	public void cleanUp(){
 		entityShader.cleanUp();
 		terrainShader.cleanUp();
+		skyboxShader.cleanUp();
 	}
 	
 	public static void setRenderBoundingBoxes(boolean value){

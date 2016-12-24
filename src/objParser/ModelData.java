@@ -11,14 +11,16 @@ public class ModelData {
 	private float[] textureCoords;
 	private float[] normals;
 	private int[] indices;
+	private float[] boundingBox;
 	private float furthestPoint;
 
 	public ModelData(float[] vertices, float[] textureCoords, float[] normals, int[] indices,
-			float furthestPoint) {
+			float[] boundingBox, float furthestPoint) {
 		this.vertices = vertices;
 		this.textureCoords = textureCoords;
 		this.normals = normals;
 		this.indices = indices;
+		this.boundingBox = boundingBox;
 		this.furthestPoint = furthestPoint;
 	}
 

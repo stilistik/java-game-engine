@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.lwjgl.util.vector.Vector3f;
 
+import collision.CollisionManager;
 import entities.Camera;
 import entities.Entity;
 import entities.EntityShader;
@@ -19,29 +20,27 @@ import terrain.Terrain;
 
 public class SceneManager {
 	
-	Player player;
-	Camera camera;
+	private Player player;
+	private Camera camera;
 	
-	MasterRenderer renderer;
+	private MasterRenderer renderer;
+	private CollisionManager collisionManager;
 	
 	private List<Entity> entities = new ArrayList<Entity>();
 	private List<Light> lights = new ArrayList<Light>();
 	private List<Terrain> terrains = new ArrayList<Terrain>();
 	
-	private int currentTerrainIndex = 0;
-	
-	public SceneManager(Loader loader){
+	public SceneManager(Loader loader, CollisionManager collisionManager){
 		renderer = new MasterRenderer(loader);
+		this.collisionManager = collisionManager;
 	}
 	
 	public void update(){
-		getCurrentTerrain();
 		sortLights();
 		sortEntities();
 	}
 	
 	public void renderScene(){
-		player.move(terrains.get(currentTerrainIndex));
 		camera.move();
 		renderer.prepare();
 		for (Entity entity : entities){
@@ -86,17 +85,6 @@ public class SceneManager {
 	        Float change2 = Float.valueOf(l2.getDistanceToPlayer());
 	        return change1.compareTo(change2);
 	    }
-	}
-	
-	private void getCurrentTerrain(){
-		for (int i = 0; i < terrains.size(); i++){
-			if ((player.getPosition().x > terrains.get(i).getX()) && 
-				(player.getPosition().x < terrains.get(i).getX() + Terrain.SIZE) && 
-				(player.getPosition().z > terrains.get(i).getZ()) &&
-				(player.getPosition().z < terrains.get(i).getZ() + Terrain.SIZE)){
-				currentTerrainIndex = i;
-			}
-		}
 	}
 	
 	public void setPlayer(Player p){

@@ -8,6 +8,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
+import collision.CollisionManager;
 import entities.Camera;
 import entities.Entity;
 import entities.Lamp;
@@ -39,7 +40,8 @@ public class MainGameLoop {
 		
 		Loader loader = new Loader();
 		ModelCreator modelCreator = new ModelCreator(loader);
-		SceneManager sceneManager = new SceneManager(loader);
+		CollisionManager collisionManager = new CollisionManager();
+		SceneManager sceneManager = new SceneManager(loader, collisionManager);
 		Random random = new Random();
 		
 		// terrain
@@ -59,6 +61,8 @@ public class MainGameLoop {
 		Terrain terrain2 = new Terrain(0, 1, loader, ttp, "heightMap");
 		sceneManager.addTerrain(terrain1);
 		sceneManager.addTerrain(terrain2);
+		collisionManager.addTerrain(terrain1);
+		collisionManager.addTerrain(terrain2);
 		
 		// entities
 		TexturedModel fernModel = modelCreator.createModel("obj/fernModel", "textures/fernTextureAtlas");
@@ -101,7 +105,6 @@ public class MainGameLoop {
 			float ry = random.nextFloat()*600;
 			sceneManager.addEntity(new Entity(grassModel, new Vector3f(x,y,z),0,ry,0,2));
 		}
-	
 		
 		// light
 		Sun sun = new Sun(new Vector3f(0,1000,1000), new Vector3f(1.4f,1,1));
@@ -129,6 +132,7 @@ public class MainGameLoop {
 		TexturedModel playerModel = modelCreator.createModel("obj/playerModel", "textures/playerTexture");
 		Player player = new Player(playerModel, new Vector3f(400, 40, 400), 0, 0, 0, 0.7f);
 		sceneManager.setPlayer(player);
+		collisionManager.setPlayer(player);
 		
 		// camera
 		Camera camera = new Camera(player);	
@@ -136,6 +140,7 @@ public class MainGameLoop {
 		
 		while(GameStateManager.getCurrentState() != GameState.CLOSE_REQUESTED){
 			GameStateManager.update();
+			collisionManager.update();
 			sceneManager.update();
 			sceneManager.renderScene();
 			DisplayManager.updateDisplay();

@@ -65,15 +65,15 @@ public class SkyboxRenderer {
 	private int nightTextureID;
 	private SkyboxShader shader;
 	
-	public SkyboxRenderer(Loader loader, Matrix4f projectionMatrix){
+	public SkyboxRenderer(SkyboxShader shader, Loader loader, Matrix4f projectionMatrix){
+		this.shader = shader;
+		this.shader.start();
+		this.shader.connectTextureUnits();
+		this.shader.loadProjectionMatrix(projectionMatrix);
+		this.shader.stop();
 		model = loader.loadToVAO(VERTICES, 3);
 		textureID = loader.loadCubeMap(TEXTURE_FILES);
 		nightTextureID = loader.loadCubeMap(NIGHT_TEXTURE_FILES);
-		shader = new SkyboxShader();
-		shader.start();
-		shader.connectTextureUnits();
-		shader.loadProjectionMatrix(projectionMatrix);
-		shader.stop();
 	}
 	
 	public void render(Camera camera, float r, float g, float b){
@@ -96,6 +96,4 @@ public class SkyboxRenderer {
 		GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, nightTextureID);
 		shader.loadBlendFactor(0);
 	}
-	
-
 }

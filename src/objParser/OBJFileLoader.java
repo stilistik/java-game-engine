@@ -70,14 +70,15 @@ public class OBJFileLoader {
 			System.err.println("Error reading the file");
 		}
 		removeUnusedVertices(vertices);
+		float[] boundingBox = createBoundingBoxArray();
 		float[] verticesArray = new float[vertices.size() * 3];
 		float[] texturesArray = new float[vertices.size() * 2];
 		float[] normalsArray = new float[vertices.size() * 3];
 		float furthest = convertDataToArrays(vertices, textures, normals, verticesArray,
-				texturesArray, normalsArray);
+				texturesArray, normalsArray, boundingBox);
 		int[] indicesArray = convertIndicesListToArray(indices);
 		ModelData data = new ModelData(verticesArray, texturesArray, normalsArray, indicesArray,
-				furthest);
+				boundingBox, furthest);
 		return data;
 	}
 
@@ -106,7 +107,7 @@ public class OBJFileLoader {
 
 	private static float convertDataToArrays(List<Vertex> vertices, List<Vector2f> textures,
 			List<Vector3f> normals, float[] verticesArray, float[] texturesArray,
-			float[] normalsArray) {
+			float[] normalsArray, float[] boundingBox) {
 		float furthestPoint = 0;
 		for (int i = 0; i < vertices.size(); i++) {
 			Vertex currentVertex = vertices.get(i);
@@ -116,6 +117,7 @@ public class OBJFileLoader {
 			Vector3f position = currentVertex.getPosition();
 			Vector2f textureCoord = textures.get(currentVertex.getTextureIndex());
 			Vector3f normalVector = normals.get(currentVertex.getNormalIndex());
+			checkBoundingValues(position, boundingBox);
 			verticesArray[i * 3] = position.x;
 			verticesArray[i * 3 + 1] = position.y;
 			verticesArray[i * 3 + 2] = position.z;
@@ -126,6 +128,29 @@ public class OBJFileLoader {
 			normalsArray[i * 3 + 2] = normalVector.z;
 		}
 		return furthestPoint;
+	}
+	
+	private static float[] createBoundingBoxArray(){
+		float values[] = {
+				 Float.MAX_VALUE,  Float.MAX_VALUE,  Float.MAX_VALUE,
+				-Float.MAX_VALUE, -Float.MAX_VALUE, -Float.MAX_VALUE
+		};
+		return values;
+	}
+	
+	private static void checkBoundingValues(Vector3f position, float[] boundingBox){
+		if (position.x < boundingBox[0])
+			boundingBox[0] = position.x;
+		if (position.y < boundingBox[1])
+			boundingBox[1] = position.y;
+		if (position.z < boundingBox[2])
+			boundingBox[2] = position.z;
+		if (position.x > boundingBox[0])
+			boundingBox[0] = position.x;
+		if (position.y > boundingBox[1])
+			boundingBox[1] = position.y;
+		if (position.z > boundingBox[2])
+			boundingBox[2] = position.z;
 	}
 
 	private static void dealWithAlreadyProcessedVertex(Vertex previousVertex, int newTextureIndex,
