@@ -6,6 +6,7 @@ import org.lwjgl.util.vector.Vector3f;
 import models.TexturedModel;
 import renderEngine.DisplayManager;
 import terrain.Terrain;
+import toolBox.Maths;
 
 public class Player extends Entity {
 	
@@ -37,6 +38,7 @@ public class Player extends Entity {
 		float dz = (float) (distance * Math.cos(Math.toRadians(super.getRotY())));
 		float dy = upwardsSpeed * t;
 		super.increasePosition(dx, dy, dz);
+		aabb.update(Maths.createTransformationMatrix(super.getPosition(), super.getRotX(), super.getRotY(), super.getRotZ(), super.getScale()));
 	}
 	
 	private void checkInputs(){
