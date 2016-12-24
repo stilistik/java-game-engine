@@ -1,5 +1,9 @@
 package models;
 
+import java.util.List;
+
+import org.lwjgl.util.vector.Vector3f;
+
 import textures.ModelTexture;
 
 public class TexturedModel {

@@ -29,6 +29,8 @@ public class MasterRenderer {
 	private static final float RED = 0.5f;
 	private static final float GREEN =  0.62f; 
 	private static final float BLUE = 0.7f;
+	
+	private static boolean renderBoundingBoxes = false;
 
 	
 	private Matrix4f projectionMatrix;
@@ -68,7 +70,7 @@ public class MasterRenderer {
 		terrainShader.loadViewMatrix(camera);
 		terrainRenderer.render(terrains);
 		terrainShader.stop();
-		skyboxRenderer.render(camera, RED, GREEN, BLUE);
+		skyboxRenderer.render(camera, RED, GREEN, BLUE);	
 		entities.clear();
 		terrains.clear();
 	}
@@ -122,6 +124,10 @@ public class MasterRenderer {
 	public void cleanUp(){
 		entityShader.cleanUp();
 		terrainShader.cleanUp();
+	}
+	
+	public static void setRenderBoundingBoxes(boolean value){
+		renderBoundingBoxes = value;
 	}
 
 }

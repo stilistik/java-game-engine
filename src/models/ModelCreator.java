@@ -1,5 +1,7 @@
 package models;
 
+import org.lwjgl.util.vector.Vector3f;
+
 import objParser.ModelData;
 import objParser.OBJFileLoader;
 import renderEngine.Loader;
@@ -19,5 +21,4 @@ public class ModelCreator {
 		ModelTexture mt = new ModelTexture(loader.loadTexture(tex));
 		return new TexturedModel(rm, mt);
 	}
-
 }

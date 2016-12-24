@@ -1,8 +1,14 @@
 package entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 
 import models.TexturedModel;
+import toolBox.Maths;
 
 public class Entity {
 	
@@ -10,21 +16,15 @@ public class Entity {
 	private Vector3f position;
 	private float rotX, rotY, rotZ;
 	private float scale;
+	private float distanceToPlayer;
 	
 	private int textureIndex = 0;
 	
 	public Entity(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
-		super();
-		this.model = model;
-		this.position = position;
-		this.rotX = rotX;
-		this.rotY = rotY;
-		this.rotZ = rotZ;
-		this.scale = scale;
+		this(model, 0, position, rotX, rotY, rotZ, scale);
 	}
 	
 	public Entity(TexturedModel model, int textureIndex, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
-		super();
 		this.textureIndex = textureIndex;
 		this.model = model;
 		this.position = position;
@@ -102,5 +102,13 @@ public class Entity {
 
 	public void setScale(float scale) {
 		this.scale = scale;
+	}
+	
+	public void setDistanceToPlayer(float d){
+		distanceToPlayer = d;
+	}
+	
+	public float getDistanceToPlayer(){
+		return distanceToPlayer;
 	}
 }

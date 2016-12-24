@@ -1,5 +1,10 @@
 package objParser;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.lwjgl.util.vector.Vector3f;
+
 public class ModelData {
 
 	private float[] vertices;
@@ -36,5 +41,4 @@ public class ModelData {
 	public float getFurthestPoint() {
 		return furthestPoint;
 	}
-
 }

@@ -33,8 +33,10 @@ import textures.TerrainTexturePack;
 public class MainGameLoop {
 
 	public static void main(String[] args){
+		DisplayManager.createMetricsDisplay();
 		DisplayManager.createDisplay();
-		DisplayManager.setFullScreen();
+//		DisplayManager.setFullScreen();
+		
 		Loader loader = new Loader();
 		ModelCreator modelCreator = new ModelCreator(loader);
 		SceneManager sceneManager = new SceneManager(loader);
@@ -77,7 +79,7 @@ public class MainGameLoop {
 			float z = random.nextFloat()*800;
 			float y = terrain1.getHeightOfTerrain(x, z);
 			float ry = random.nextFloat()*600;
-			sceneManager.addEntity(new Entity(pineModel, new Vector3f(x,y,z),0,ry,0,1));
+			sceneManager.addEntity(new Entity(pineModel, 0, new Vector3f(x,y,z),0,ry,0,1));
 		}
 		
 		TexturedModel cherryTreeModel = modelCreator.createModel("obj/cherryTreeModel", "textures/cherryTreeTexture");
@@ -124,7 +126,7 @@ public class MainGameLoop {
 		}
 		
 		// player
-		TexturedModel playerModel = modelCreator.createModel("obj/bunnyModel", "textures/pathFloorTexture");
+		TexturedModel playerModel = modelCreator.createModel("obj/playerModel", "textures/playerTexture");
 		Player player = new Player(playerModel, new Vector3f(400, 40, 400), 0, 0, 0, 0.7f);
 		sceneManager.setPlayer(player);
 		
@@ -137,8 +139,10 @@ public class MainGameLoop {
 			sceneManager.update();
 			sceneManager.renderScene();
 			DisplayManager.updateDisplay();
+			DisplayManager.updateMetricDisplay();
 		}		
 		loader.cleanUp();
 		DisplayManager.closeDisplay();
+		DisplayManager.closeMetricDisplay();
 	}
 }

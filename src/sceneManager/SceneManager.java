@@ -37,6 +37,7 @@ public class SceneManager {
 	public void update(){
 		getCurrentTerrain();
 		sortLights();
+		sortEntities();
 	}
 	
 	public void renderScene(){
@@ -49,7 +50,7 @@ public class SceneManager {
 		for (Terrain terrain : terrains){
 			renderer.processTerrain(terrain);
 		}
-		renderer.render(lights, camera);
+		renderer.render(lights, camera);		
 	}
 	
 	private void sortLights(){
@@ -58,10 +59,27 @@ public class SceneManager {
 			Vector3f.sub(light.getPosition(), player.getPosition(), v);
 			light.setDistanceToPlayer(v.length());
 		}
-		lights.sort(new DistanceSort());	
+		lights.sort(new LightDistanceSort());	
 	}
 	
-	class DistanceSort implements Comparator<Light>
+	private void sortEntities(){
+		for(Entity entity: entities){
+			Vector3f v = new Vector3f();
+			Vector3f.sub(entity.getPosition(), player.getPosition(), v);
+			entity.setDistanceToPlayer(v.length());
+		}
+	}
+	
+	class EntityDistanceSort implements Comparator<Entity>
+	{
+	    public int compare(Entity e1, Entity e2){
+	        Float change1 = Float.valueOf(e1.getDistanceToPlayer());
+	        Float change2 = Float.valueOf(e2.getDistanceToPlayer());
+	        return change1.compareTo(change2);
+	    }
+	}
+	
+	class LightDistanceSort implements Comparator<Light>
 	{
 	    public int compare(Light l1, Light l2){
 	        Float change1 = Float.valueOf(l1.getDistanceToPlayer());
