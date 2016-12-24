@@ -3,26 +3,42 @@ package collision;
 import java.util.ArrayList;
 import java.util.List;
 
+import entities.Camera;
 import entities.Entity;
 import entities.Player;
 import terrain.Terrain;
 
 public class CollisionManager {
 	
+	private static final float CAMERA_TERRAIN_COLLISION_OFFSET = 1;
+	
 	private Player player;
+	private Camera camera;
 	private List<Entity> collisionEntities = new ArrayList<Entity>();
 	private List<Terrain> terrains = new ArrayList<Terrain>();
 	
 	private int currentTerrainIndex = 0;
 	
-	public CollisionManager(){
-		
-	}
+	public CollisionManager() {}
 	
 	public void update(){
-		// check for collision
+		camera.move();
+		player.move();
+		terrainCollision();
+	}
+	
+	private void terrainCollision(){
 		getCurrentTerrain();
-		player.move(terrains.get(currentTerrainIndex));
+		float terrainHeight = terrains.get(currentTerrainIndex).getHeightOfTerrain(player.getPosition().x, player.getPosition().z);
+		if (player.getPosition().y < terrainHeight){
+			player.setUpwardsSpeed(0);
+			player.getPosition().y = terrainHeight;
+			player.setInAir(false);
+		}
+		terrainHeight = terrains.get(currentTerrainIndex).getHeightOfTerrain(camera.getPosition().x, camera.getPosition().z);
+		if (camera.getPosition().y < terrainHeight + CAMERA_TERRAIN_COLLISION_OFFSET){
+			camera.getPosition().y = terrainHeight + CAMERA_TERRAIN_COLLISION_OFFSET;
+		}
 	}
 	
 	private void getCurrentTerrain(){
@@ -46,5 +62,9 @@ public class CollisionManager {
 	
 	public void setPlayer(Player player){
 		this.player = player;
+	}
+	
+	public void setCamera(Camera camera){
+		this.camera = camera;
 	}
 }

@@ -41,7 +41,6 @@ public class SceneManager {
 	}
 	
 	public void renderScene(){
-		camera.move();
 		renderer.prepare();
 		for (Entity entity : entities){
 			renderer.processEntity(entity);

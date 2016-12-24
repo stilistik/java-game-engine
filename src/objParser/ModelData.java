@@ -11,16 +11,16 @@ public class ModelData {
 	private float[] textureCoords;
 	private float[] normals;
 	private int[] indices;
-	private float[] boundingBox;
+	private float[] aabb;
 	private float furthestPoint;
 
 	public ModelData(float[] vertices, float[] textureCoords, float[] normals, int[] indices,
-			float[] boundingBox, float furthestPoint) {
+			float[] aabb, float furthestPoint) {
 		this.vertices = vertices;
 		this.textureCoords = textureCoords;
 		this.normals = normals;
 		this.indices = indices;
-		this.boundingBox = boundingBox;
+		this.aabb = aabb;
 		this.furthestPoint = furthestPoint;
 	}
 
@@ -42,5 +42,9 @@ public class ModelData {
 
 	public float getFurthestPoint() {
 		return furthestPoint;
+	}
+	
+	public float[] getBoundingBox(){
+		return aabb;
 	}
 }

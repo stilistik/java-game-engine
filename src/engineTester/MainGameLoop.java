@@ -137,6 +137,7 @@ public class MainGameLoop {
 		// camera
 		Camera camera = new Camera(player);	
 		sceneManager.setCamera(camera);
+		collisionManager.setCamera(camera);
 		
 		while(GameStateManager.getCurrentState() != GameState.CLOSE_REQUESTED){
 			GameStateManager.update();

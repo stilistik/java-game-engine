@@ -132,8 +132,9 @@ public class OBJFileLoader {
 	
 	private static float[] createBoundingBoxArray(){
 		float values[] = {
-				 Float.MAX_VALUE,  Float.MAX_VALUE,  Float.MAX_VALUE,
-				-Float.MAX_VALUE, -Float.MAX_VALUE, -Float.MAX_VALUE
+				 Float.MAX_VALUE,  -Float.MAX_VALUE, 
+				 Float.MAX_VALUE,  -Float.MAX_VALUE,
+				 Float.MAX_VALUE,  -Float.MAX_VALUE
 		};
 		return values;
 	}
@@ -141,16 +142,21 @@ public class OBJFileLoader {
 	private static void checkBoundingValues(Vector3f position, float[] boundingBox){
 		if (position.x < boundingBox[0])
 			boundingBox[0] = position.x;
-		if (position.y < boundingBox[1])
-			boundingBox[1] = position.y;
-		if (position.z < boundingBox[2])
-			boundingBox[2] = position.z;
-		if (position.x > boundingBox[0])
-			boundingBox[0] = position.x;
-		if (position.y > boundingBox[1])
-			boundingBox[1] = position.y;
-		if (position.z > boundingBox[2])
-			boundingBox[2] = position.z;
+		
+		if (position.x > boundingBox[1])
+			boundingBox[1] = position.x;
+		
+		if (position.y < boundingBox[2])
+			boundingBox[2] = position.y;
+		
+		if (position.y > boundingBox[3])
+			boundingBox[3] = position.y;
+		
+		if (position.z < boundingBox[4])
+			boundingBox[4] = position.z;
+		
+		if (position.z > boundingBox[5])
+			boundingBox[5] = position.z;
 	}
 
 	private static void dealWithAlreadyProcessedVertex(Vertex previousVertex, int newTextureIndex,

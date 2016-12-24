@@ -27,7 +27,7 @@ public class Player extends Entity {
 		super(model, position, rotX, rotY, rotZ, scale);
 	}
 	
-	public void move(Terrain terrain){
+	public void move(){
 		checkInputs();
 		float t = DisplayManager.getFrameTimeSeconds();
 		super.increaseRotation(0, currentTurnSpeed * t, 0);
@@ -37,12 +37,6 @@ public class Player extends Entity {
 		float dz = (float) (distance * Math.cos(Math.toRadians(super.getRotY())));
 		float dy = upwardsSpeed * t;
 		super.increasePosition(dx, dy, dz);
-		float terrainHeight = terrain.getHeightOfTerrain(super.getPosition().x, super.getPosition().z);
-		if (super.getPosition().y < terrainHeight){
-			upwardsSpeed = 0;
-			super.getPosition().y = terrainHeight;
-			inAir = false;
-		}
 	}
 	
 	private void checkInputs(){
@@ -81,4 +75,13 @@ public class Player extends Entity {
 	public void setModelHeight(float modelHeight) {
 		this.modelHeight = modelHeight;
 	}
+	
+	public void setUpwardsSpeed(float speed){
+		upwardsSpeed = speed;
+	}
+	
+	public void setInAir(boolean value){
+		inAir = value;
+	}
 }
+
