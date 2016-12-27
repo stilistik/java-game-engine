@@ -9,7 +9,7 @@ import org.lwjgl.util.vector.Vector3f;
 import entities.Camera;
 import entities.Light;
 import shaders.ShaderProgram;
-import toolBox.Maths;
+import tools.Maths;
 
 public class TerrainShader extends ShaderProgram {
 

@@ -9,10 +9,10 @@ import org.lwjgl.util.vector.Vector4f;
 
 import collision.AABB;
 import models.TexturedModel;
-import toolBox.Maths;
+import tools.Maths;
 
 public class Entity {
-	
+		
 	private TexturedModel model;
 	private int textureIndex;
 	private Vector3f position;
@@ -20,6 +20,7 @@ public class Entity {
 	private float scale;
 	private float distanceToPlayer;
 	
+	private Matrix4f transformationMatrix;
 	protected AABB aabb;
 	
 	public Entity(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale) {

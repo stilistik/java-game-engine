@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.lwjgl.util.vector.Vector3f;
 
+import renderEngine.Loader;
+
 public class RawModel {
 	
 	private int vaoID;

@@ -7,7 +7,7 @@ import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import shaders.ShaderProgram;
-import toolBox.Maths;
+import tools.Maths;
 
 public class EntityShader extends ShaderProgram{
 

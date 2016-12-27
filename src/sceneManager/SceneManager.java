@@ -24,15 +24,13 @@ public class SceneManager {
 	private Camera camera;
 	
 	private MasterRenderer renderer;
-	private CollisionManager collisionManager;
 	
 	private List<Entity> entities = new ArrayList<Entity>();
 	private List<Light> lights = new ArrayList<Light>();
 	private List<Terrain> terrains = new ArrayList<Terrain>();
 	
-	public SceneManager(Loader loader, CollisionManager collisionManager){
+	public SceneManager(Loader loader){
 		renderer = new MasterRenderer(loader);
-		this.collisionManager = collisionManager;
 	}
 	
 	public void update(){
@@ -43,7 +41,7 @@ public class SceneManager {
 	public void renderScene(){
 		renderer.prepare();
 		for (Entity entity : entities){
-			renderer.processEntity(entity);
+			renderer.processEntity(entity, camera);
 		}
 		for (Terrain terrain : terrains){
 			renderer.processTerrain(terrain);

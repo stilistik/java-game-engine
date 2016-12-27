@@ -9,6 +9,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
 import collision.CollisionManager;
+import collision.EndPoint;
 import entities.Camera;
 import entities.Entity;
 import entities.Lamp;
@@ -36,13 +37,13 @@ public class MainGameLoop {
 	public static void main(String[] args){
 		DisplayManager.createMetricsDisplay();
 		DisplayManager.createDisplay();
-//		DisplayManager.setFullScreen();
+		DisplayManager.setFullScreen();
 		
 		Loader loader = new Loader();
 		ModelCreator modelCreator = new ModelCreator(loader);
 		CollisionManager collisionManager = new CollisionManager();
-		SceneManager sceneManager = new SceneManager(loader, collisionManager);
-		Random random = new Random();
+		SceneManager sceneManager = new SceneManager(loader);
+		Random random = new Random();		
 		
 		// terrain
 		List<TerrainTexture> terrainTextures = new ArrayList<TerrainTexture>();
@@ -145,7 +146,7 @@ public class MainGameLoop {
 			sceneManager.update();
 			sceneManager.renderScene();
 			DisplayManager.updateDisplay();
-			DisplayManager.updateMetricDisplay();
+			DisplayManager.updateMetricDisplay();			
 		}		
 		loader.cleanUp();
 		DisplayManager.closeDisplay();

@@ -14,7 +14,7 @@ import models.RawModel;
 import models.TexturedModel;
 import textures.ModelTexture;
 import textures.TerrainTexturePack;
-import toolBox.Maths;
+import tools.Maths;
 
 public class TerrainRenderer {
 	

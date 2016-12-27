@@ -14,17 +14,30 @@ public class CollisionManager {
 	
 	private Player player;
 	private Camera camera;
-	private List<Entity> collisionEntities = new ArrayList<Entity>();
+	private SweepAndPrune sap;
+	
+	private List<Entity> dynamicEntities = new ArrayList<Entity>();
+	private List<Entity> staticEntities = new ArrayList<Entity>();
 	private List<Terrain> terrains = new ArrayList<Terrain>();
+	
 	
 	private int currentTerrainIndex = 0;
 	
-	public CollisionManager() {}
+	public CollisionManager() {
+		sap = new SweepAndPrune();
+	}
 	
 	public void update(){
 		camera.move();
 		player.move();
+		broadPhase();
 		terrainCollision();
+	}
+	
+	private void broadPhase(){
+		for (Entity entity : dynamicEntities){
+			sap.update(entity.getAABB());
+		}
 	}
 	
 	private void terrainCollision(){
@@ -52,8 +65,8 @@ public class CollisionManager {
 		}
 	}
 	
-	public void addEntity(Entity entity){
-		collisionEntities.add(entity);
+	public void addStaticEntity(Entity entity){
+		staticEntities.add(entity);
 	}
 	
 	public void addTerrain(Terrain terrain){
@@ -62,6 +75,7 @@ public class CollisionManager {
 	
 	public void setPlayer(Player player){
 		this.player = player;
+		dynamicEntities.add(player);
 	}
 	
 	public void setCamera(Camera camera){

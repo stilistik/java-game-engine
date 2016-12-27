@@ -8,6 +8,8 @@ import java.util.Map;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 
 import entities.Camera;
 import entities.Entity;
@@ -20,21 +22,15 @@ import skybox.SkyboxShader;
 import terrain.Terrain;
 import terrain.TerrainRenderer;
 import terrain.TerrainShader;
+import tools.Maths;
 
 public class MasterRenderer {
-	
-	private static final float FOV = 70;
-	private static final float NEAR_PLANE = 0.1f;
-	private static final float FAR_PLANE = 1000;
 	
 	private static final float RED = 0.5f;
 	private static final float GREEN =  0.62f; 
 	private static final float BLUE = 0.7f;
-	
-	private static boolean renderBoundingBoxes = false;
-
-	
-	private Matrix4f projectionMatrix;
+		
+	private Frustum frustum;
 	
 	private EntityShader entityShader;
 	private EntityRenderer entityRenderer;
@@ -50,13 +46,13 @@ public class MasterRenderer {
 	
 	public MasterRenderer(Loader loader){
 		enableCulling();
-		createProjectionMatrix();
+		frustum = new Frustum();
 		entityShader = new EntityShader();
-		entityRenderer = new EntityRenderer(entityShader, projectionMatrix);
+		entityRenderer = new EntityRenderer(entityShader, frustum.getProjectionMatrix());
 		terrainShader = new TerrainShader();
-		terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
+		terrainRenderer = new TerrainRenderer(terrainShader, frustum.getProjectionMatrix());
 		skyboxShader = new SkyboxShader();
-		skyboxRenderer = new SkyboxRenderer(skyboxShader, loader, projectionMatrix);
+		skyboxRenderer = new SkyboxRenderer(skyboxShader, loader, frustum.getProjectionMatrix());
 	}
 	
 	public void render(List<Light> lights, Camera camera){
@@ -73,7 +69,8 @@ public class MasterRenderer {
 		terrainShader.loadViewMatrix(camera);
 		terrainRenderer.render(terrains);
 		terrainShader.stop();
-		skyboxRenderer.render(camera, RED, GREEN, BLUE);	
+		skyboxRenderer.render(camera, RED, GREEN, BLUE);
+		
 		entities.clear();
 		terrains.clear();
 	}
@@ -82,7 +79,9 @@ public class MasterRenderer {
 		terrains.add(terrain);
 	}
 	
-	public void processEntity(Entity entity){
+	public void processEntity(Entity entity, Camera camera){
+		if (cullFrustum(entity, camera))
+			return;
 		TexturedModel model = entity.getModel();
 		List<Entity> batch = entities.get(model);
 		if(batch != null){
@@ -92,6 +91,33 @@ public class MasterRenderer {
 			newBatch.add(entity);
 			entities.put(model, newBatch);
 		}
+	}
+	
+	private boolean cullFrustum(Entity entity, Camera camera){
+		Matrix4f mat = Maths.createViewMatrix(camera);
+		List<Vector4f> fp_viewSpace = frustum.getFrustumPlanes();	
+		
+		float xVal[] = entity.getAABB().getXValues();
+		float yVal[] = entity.getAABB().getYValues();
+		float zVal[] = entity.getAABB().getZValues();
+		
+		for (Vector4f normal_viewSpace : fp_viewSpace){
+			int px = (normal_viewSpace.x > 0) ? 1 : 0;
+			int py = (normal_viewSpace.y > 0) ? 1 : 0;
+			int pz = (normal_viewSpace.z > 0) ? 1 : 0;
+			
+			Vector4f v = new Vector4f(xVal[px], yVal[py], zVal[pz], 1);
+			Matrix4f.transform(mat, v, v);
+			
+			float distanceToPlane = normal_viewSpace.x * v.x +
+									normal_viewSpace.y * v.y +
+									normal_viewSpace.z * v.z;
+			
+			if (distanceToPlane < -normal_viewSpace.w){
+				return true;
+			}				
+		}
+		return false;
 	}
 	
 	public static void enableCulling(){
@@ -109,29 +135,9 @@ public class MasterRenderer {
 		GL11.glClearColor(RED, GREEN, BLUE, 1);
 	}
 	
-	private void createProjectionMatrix(){
-		float aspectRatio = (float) Display.getWidth() / (float) Display.getHeight();
-		float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))) * aspectRatio);
-		float x_scale = y_scale / aspectRatio;
-		float frustum_length = FAR_PLANE - NEAR_PLANE;
-		
-		projectionMatrix = new Matrix4f();
-		projectionMatrix.m00 = x_scale;
-		projectionMatrix.m11 = y_scale;
-		projectionMatrix.m22 = -((FAR_PLANE + NEAR_PLANE) / frustum_length);
-		projectionMatrix.m23 = -1;
-		projectionMatrix.m32 = -((2 * NEAR_PLANE * FAR_PLANE) / frustum_length);
-		projectionMatrix.m33 = 0;		
-	}
-	
 	public void cleanUp(){
 		entityShader.cleanUp();
 		terrainShader.cleanUp();
 		skyboxShader.cleanUp();
 	}
-	
-	public static void setRenderBoundingBoxes(boolean value){
-		renderBoundingBoxes = value;
-	}
-
 }

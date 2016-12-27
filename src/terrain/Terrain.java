@@ -14,7 +14,7 @@ import renderEngine.Loader;
 import textures.ModelTexture;
 import textures.TerrainTexture;
 import textures.TerrainTexturePack;
-import toolBox.Maths;
+import tools.Maths;
 
 public class Terrain {
 	
@@ -39,7 +39,7 @@ public class Terrain {
 		this.texturePack = texturePack;
 		this.x = gridX * SIZE;
 		this.z = gridZ * SIZE;
-		this.model = generateTerrain(loader, heightMapLocation);		
+		this.model = generateTerrain(loader);		
 	}
 	
 	private void loadHeightMap(String heightMapLocation, Loader loader){
@@ -51,7 +51,7 @@ public class Terrain {
 		}
 	}
 	
-	private RawModel generateTerrain(Loader loader, String heightMapLocation){
+	private RawModel generateTerrain(Loader loader){
 		int VERTEX_COUNT = heightMap.getHeight();
 		int count = VERTEX_COUNT * VERTEX_COUNT;
 		heights = new float[VERTEX_COUNT][VERTEX_COUNT];
@@ -153,5 +153,13 @@ public class Terrain {
 
 	public TerrainTexturePack getTexturePack() {
 		return texturePack;
+	}
+	
+	public BufferedImage getHeightMap(){
+		return heightMap;
+	}
+	
+	public void setRawModel(RawModel model){
+		this.model = model;
 	}
 }
