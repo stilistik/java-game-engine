@@ -53,8 +53,8 @@ public class Forest extends Scene{
 
 	@Override
 	protected void createTerrain() {
-		TerrainCreator.createTerrainData("forest", new ResFile(sceneFile, "terrain"));
-		terrain = TerrainCreator.createTerrain("forest", gridX,	gridX);
+//		TerrainCreator.createTerrainTexture("forest", new ResFile(sceneFile, "terrain"));
+//		terrain = TerrainCreator.createTerrain("forest", gridX,	gridX);
 	}
 
 	@Override

@@ -14,22 +14,14 @@ uniform mat4 transformationMatrix;
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 
-uniform sampler2D heightMap;
 uniform vec3 lightPosition[6];
 
 const float density = 0.0035;
 const float gradient = 5.0;
 
-const float maxHeight = 40;
-
 void main(void){
-		
-	vec4 heightMapColor = texture(heightMap, textureCoords);
-	float heightMapValue = (heightMapColor.r + heightMapColor.g + heightMapColor.b)/3;
-	float height = heightMapValue * maxHeight*2 - maxHeight;
-
-	vec3 position_height = vec3(position.x, height, position.z);
-	vec4 worldPosition = transformationMatrix * vec4(position_height, 1.0);
+	
+	vec4 worldPosition = transformationMatrix * vec4(position, 1.0);
 	vec4 camPosition = viewMatrix * worldPosition;
 	gl_Position = projectionMatrix * camPosition;
 	pass_textureCoords = textureCoords;	

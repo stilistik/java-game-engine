@@ -29,7 +29,6 @@ public class TerrainShader extends ShaderProgram {
 	private int location_nTextures;
 	private int location_textures[];
 	private int location_textureMaps[];
-	private int location_heightMap;
 	
 	public TerrainShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
@@ -60,7 +59,6 @@ public class TerrainShader extends ShaderProgram {
 			location_lightAttenuation[i] = super.getUniformLocation("lightAttenuation[" + i + "]");
 		}
 		
-		location_heightMap = super.getUniformLocation("heightMap");
 		location_nTextures = super.getUniformLocation("nTextures");
 		location_textures = new int[MAX_TEXTURES];
 		location_textureMaps = new int[MAX_TEXTURES];
@@ -77,7 +75,6 @@ public class TerrainShader extends ShaderProgram {
 		for (int i = 0; i < MAX_TEXTURES; i++){
 			super.loadInt(location_textureMaps[i], MAX_TEXTURES+i);
 		}
-		super.loadInt(location_heightMap, MAX_TEXTURES*2);
 	}
 	
 	public void loadNumberOfTextures(int n){

@@ -5,17 +5,15 @@ import java.util.List;
 
 import texture.Texture;
 
-public class TerrainData {
+public class TerrainTexture {
 	
 	private static final int MAX_TEXTURES = 8;
 	private int nTextures;
 	
 	private Texture textures[];
 	private Texture textureMaps[];
-	private Texture heightMapTexture;
-	private BufferedImage heightMap;
 	
-	public TerrainData(List<Texture> t, List<Texture> tm, Texture heightMapTexture, BufferedImage heightMap) {
+	public TerrainTexture(List<Texture> t, List<Texture> tm) {
 		nTextures = t.size();
 		textures = new Texture[MAX_TEXTURES];
 		textureMaps = new Texture[MAX_TEXTURES];
@@ -23,8 +21,6 @@ public class TerrainData {
 			textures[i] = t.get(i);
 			textureMaps[i] = tm.get(i);
 		}
-		this.heightMapTexture = heightMapTexture;
-		this.heightMap = heightMap;
 	}
 	
 	public Texture getTexture(int idx) {
@@ -35,19 +31,7 @@ public class TerrainData {
 		return textureMaps[idx];
 	}
 	
-	public void setHeightMapTexture(Texture heightMapTexture){
-		this.heightMapTexture = heightMapTexture;
-	}
-	
-	public Texture getHeightMapTexture(){
-		return heightMapTexture;
-	}
-	
 	public int getNumberOfTextures(){
 		return nTextures;
-	}
-	
-	public BufferedImage getHeightMap(){
-		return heightMap;
 	}
 }

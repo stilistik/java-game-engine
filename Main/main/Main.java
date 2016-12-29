@@ -30,16 +30,12 @@ public class Main {
 		SceneManager sceneManager = new SceneManager();
 		
 		// terrain
-		TerrainCreator.createTerrainData("forest", new ResFile("res/terrain/forest"));
-		Terrain terrain1 = TerrainCreator.createTerrain("forest", 0, 0);
-		Terrain terrain2 = TerrainCreator.createTerrain("forest", 0, 1);
-		collisionManager.addTerrain(terrain1);
-		collisionManager.addTerrain(terrain2);
-		sceneManager.addTerrain(terrain1);
-		sceneManager.addTerrain(terrain2);
+		Terrain terrain = TerrainCreator.createTerrainRandom(new ResFile("res/terrain/forest"), "forest", 0, 0);
+		collisionManager.addTerrain(terrain);
+		sceneManager.addTerrain(terrain);
 		
 		// entities
-		StaticEntity pine = EntityCreator.createStaticEntity(new ResFile("res/entities/pine"), new Vector3f(400,terrain1.getHeightOfTerrain(400, 400),400),0,0,0,1);	
+		StaticEntity pine = EntityCreator.createStaticEntity(new ResFile("res/entities/pine"), new Vector3f(410,terrain.getHeightOfTerrain(410, 410),410),0,0,0,1);	
 		sceneManager.addStaticEntity(pine);
 		
 		// player

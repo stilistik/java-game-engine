@@ -11,7 +11,7 @@ import org.lwjgl.util.vector.Vector3f;
 import openGL.Vao;
 import shader.TerrainShader;
 import terrain.Terrain;
-import terrain.TerrainData;
+import terrain.TerrainTexture;
 import tools.Maths;
 
 public class TerrainRenderer {
@@ -30,20 +30,20 @@ public class TerrainRenderer {
 		for (Terrain terrain : terrains){
 			prepareTerrain(terrain);
 			loadModelMatrix(terrain);
-			GL11.glDrawElements(GL11.GL_TRIANGLES, terrain.getModel().getIndexCount(), GL11.GL_UNSIGNED_INT, 0);
+			GL11.glDrawElements(GL11.GL_TRIANGLES, terrain.getVao().getIndexCount(), GL11.GL_UNSIGNED_INT, 0);
 			unbindTexturedModel();
 		}
 	}
 	
 	private void prepareTerrain(Terrain terrain){
-		Vao vao  = terrain.getModel();
+		Vao vao  = terrain.getVao();
 		vao.bind(0,1,2);
 		bindTextures(terrain);
 		shader.loadShineVariables(1, 0);
 	}
 	
 	private void bindTextures(Terrain terrain){
-		TerrainData terrainData = terrain.getTexturePack();
+		TerrainTexture terrainData = terrain.getTerrainData();
 		int nTextures = terrainData.getNumberOfTextures();
 		shader.loadNumberOfTextures(nTextures);
 		int tex_index = 0;		
@@ -55,7 +55,6 @@ public class TerrainRenderer {
 			terrainData.getTextureMap(i).bindToUnit(tex_index);
 			tex_index++;
 		}
-		terrainData.getHeightMapTexture().bindToUnit(tex_index);
 	}
 	
 	private void unbindTexturedModel(){

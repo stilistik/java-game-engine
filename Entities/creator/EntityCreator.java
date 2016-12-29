@@ -10,6 +10,7 @@ import objReader.ModelData;
 import objReader.OBJFileLoader;
 import openGL.Vao;
 import player.Player;
+import skybox.Skybox;
 import texture.Texture;
 
 public class EntityCreator {
@@ -48,6 +49,4 @@ public class EntityCreator {
 		vao.unbind();
 		return vao;
 	}
-	
-
 }

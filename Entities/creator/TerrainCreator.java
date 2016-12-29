@@ -9,39 +9,30 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+import org.lwjgl.util.vector.Vector3f;
+
 import data.ResFile;
+import openGL.Vao;
 import terrain.Terrain;
-import terrain.TerrainData;
+import terrain.TerrainTexture;
 import texture.Texture;
 
 public class TerrainCreator {
 	
-	private static Map<String, TerrainData> texturePacks = new HashMap<String, TerrainData>();
+	public static final float SIZE = 800;
+	private static final float MAX_HEIGHT = 40;
+	private static final float MAX_PIXEL_COLOUR = 256 * 256 * 256;
 	
-	public static void createTerrainData(String name, ResFile terrainFile){
-		List<Texture> terrainTextures = new ArrayList<Texture>();
-		List<Texture> terrainTextureMaps = new ArrayList<Texture>();
-		terrainTextures.add(Texture.newTexture(new ResFile(terrainFile, "textures", "texture0.png")).create());
-		terrainTextures.add(Texture.newTexture(new ResFile(terrainFile, "textures", "texture1.png")).create());
-		terrainTextures.add(Texture.newTexture(new ResFile(terrainFile, "textures", "texture2.png")).create());
-		terrainTextures.add(Texture.newTexture(new ResFile(terrainFile, "textures", "texture3.png")).create());
-		terrainTextureMaps.add(Texture.newTexture(new ResFile(terrainFile, "maps", "map0.png")).create());
-		terrainTextureMaps.add(Texture.newTexture(new ResFile(terrainFile, "maps", "map1.png")).create());
-		terrainTextureMaps.add(Texture.newTexture(new ResFile(terrainFile, "maps", "map2.png")).create());
-		terrainTextureMaps.add(Texture.newTexture(new ResFile(terrainFile, "maps", "map3.png")).create());
-		Texture heightMapTexture = Texture.newTexture(new ResFile(terrainFile, "maps", "height.png")).create();
-		ResFile heightMapLocation = new ResFile(terrainFile, "maps", "height.png");
-		BufferedImage heightMap = null;
-		try {
-			heightMap = ImageIO.read(heightMapLocation.getInputStream());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		texturePacks.put(name, new TerrainData(terrainTextures, terrainTextureMaps, heightMapTexture, heightMap));
+	
+	public static Terrain createTerrainFromHeightMap(ResFile terrainFile, String name, int gridX, int gridZ){
+		TerrainTexture texture = TerrainTextureLoader.createTerrainTexture(terrainFile);
+		TerrainGeneratorHeightMap generator = new TerrainGeneratorHeightMap(terrainFile);
+		return new Terrain(gridX, gridZ, generator.getVao(), texture, generator.getHeights());
 	}
 	
-	public static Terrain createTerrain(String type, int gridX, int gridZ){
-		return new Terrain(gridX, gridZ, texturePacks.get(type));
+	public static Terrain createTerrainRandom(ResFile terrainFile, String name, int gridX, int gridZ){
+		TerrainTexture texture = TerrainTextureLoader.createTerrainTexture(terrainFile);
+		TerrainGeneratorRandom generator = new TerrainGeneratorRandom();
+		return new Terrain(gridX, gridZ, generator.getVao(), texture, generator.getHeights());
 	}
-
 }
