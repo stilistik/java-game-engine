@@ -1,8 +1,12 @@
 package creator;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.lwjgl.util.vector.Vector3f;
 
 import component.CollisionComponent;
+import component.LightComponent;
 import component.ModelComponent;
 import component.PlayerComponent;
 import component.TextureAtlasComponent;
@@ -15,17 +19,25 @@ import openGL.Vao;
 import texture.Texture;
 
 public class EntityCreator {
+	
+	private static Map<String, Model> models = new HashMap<String, Model>();
+	
+	public static Entity createLight(Vector3f position, Vector3f color, Vector3f attenuation){
+		Entity entity = new Entity(position, new Vector3f(0,0,0),1);
+		entity.addComponent(new LightComponent(entity, color, attenuation));
+		return entity;
+	}
 
-	public static Entity createStaticEntity(ResFile entityFile, Vector3f position, Vector3f rotation, float scale, int textureAtlasDimension, int textureIndex){
-		ModelData md = OBJFileLoader.loadOBJ(new ResFile(entityFile, "model.obj"));
-		Texture texture = Texture.newTexture(new ResFile(entityFile, "texture.png")).create();
-		texture.setAtlasDimension(textureAtlasDimension);
-		Vao vao = createVao(md);
-		Model model = new Model(vao, texture);
+	public static Entity createStaticEntity(String name, ResFile entityFile, Vector3f position, Vector3f rotation, float scale, int textureAtlasDimension, int textureIndex){
+		Model model = models.get(name);
+		if (model == null){
+			model = loadModel(name, entityFile);
+			models.put(name, model);
+		}		
 		Entity entity = new Entity(position, rotation, scale);
 		entity.addComponent(new ModelComponent(entity, model));
 		entity.addComponent(new TextureAtlasComponent(entity, textureAtlasDimension, textureIndex));
-		entity.addComponent(new CollisionComponent(entity, md.getBoundingBox()));
+		entity.addComponent(new CollisionComponent(entity, model.getBoundingBox()));
 		return entity;
 	}
 	
@@ -33,12 +45,20 @@ public class EntityCreator {
 		ModelData md = OBJFileLoader.loadOBJ(new ResFile(entityFile, "model.obj"));
 		Texture texture = Texture.newTexture(new ResFile(entityFile, "texture.png")).create();
 		Vao vao = createVao(md);
-		Model model = new Model(vao, texture);
+		Model model = new Model(vao, texture, md.getBoundingBox());
 		Entity entity = new Entity(position, rotation, scale);
 		entity.addComponent(new ModelComponent(entity, model));
 		entity.addComponent(new CollisionComponent(entity, md.getBoundingBox()));
 		entity.addComponent(new PlayerComponent(entity));
 		return entity;	
+	}
+	
+	private static Model loadModel(String name, ResFile entityFile){
+		ModelData md = OBJFileLoader.loadOBJ(new ResFile(entityFile, "model.obj"));
+		Texture texture = Texture.newTexture(new ResFile(entityFile, "texture.png")).create();
+		Vao vao = createVao(md);
+		Model model = new Model(vao, texture, md.getBoundingBox());
+		return model;
 	}
 	
 	private static Vao createVao(ModelData md){

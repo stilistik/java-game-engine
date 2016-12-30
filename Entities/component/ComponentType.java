@@ -7,5 +7,6 @@ public enum ComponentType {
 	LOCATION,
 	MOVING,
 	COLLISION,
-	PLAYER
+	PLAYER,
+	LIGHT
 }

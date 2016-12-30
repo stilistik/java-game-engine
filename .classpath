@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="Main"/>
 	<classpathentry kind="src" path="Scene"/>
+	<classpathentry kind="src" path="Terrain"/>
 	<classpathentry kind="src" path="Entities"/>
 	<classpathentry kind="src" path="RenderEngine"/>
 	<classpathentry kind="src" path="PhysicsEngine"/>

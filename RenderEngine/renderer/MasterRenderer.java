@@ -52,7 +52,7 @@ public class MasterRenderer {
 		skyboxRenderer = new SkyboxRenderer(skyboxShader, frustum.getProjectionMatrix());
 	}
 	
-	public void render(List<Light> lights, Camera camera){
+	public void render(List<Entity> lights, Camera camera){
 		prepare();
 		
 		entityShader.start();

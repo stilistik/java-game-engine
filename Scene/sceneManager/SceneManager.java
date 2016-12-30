@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.lwjgl.util.vector.Vector3f;
 
+import component.LightComponent;
 import entity.Entity;
 import light.Light;
 import player.Camera;
@@ -20,7 +21,7 @@ public class SceneManager {
 	private MasterRenderer renderer = new MasterRenderer();
 	
 	private List<Entity> entities = new ArrayList<Entity>();
-	private List<Light> lights = new ArrayList<Light>();
+	private List<Entity> lights = new ArrayList<Entity>();
 	private List<Terrain> terrains = new ArrayList<Terrain>();
 	
 	public SceneManager(){}
@@ -41,19 +42,19 @@ public class SceneManager {
 	}
 	
 	private void sortLights(){
-		for (Light light : lights){
+		for (Entity light : lights){
 			Vector3f v = new Vector3f();
 			Vector3f.sub(light.getPosition(), player.getPosition(), v);
-			light.setDistanceToPlayer(v.length());
+			light.getComponent(LightComponent.class).setDistanceToPlayer(v.length());
 		}
 		lights.sort(new LightDistanceSort());	
 	}
 	
-	class LightDistanceSort implements Comparator<Light>
+	class LightDistanceSort implements Comparator<Entity>
 	{
-	    public int compare(Light l1, Light l2){
-	        Float change1 = Float.valueOf(l1.getDistanceToPlayer());
-	        Float change2 = Float.valueOf(l2.getDistanceToPlayer());
+	    public int compare(Entity light1, Entity light2){
+	        Float change1 = Float.valueOf(light1.getComponent(LightComponent.class).getDistanceToPlayer());
+	        Float change2 = Float.valueOf(light2.getComponent(LightComponent.class).getDistanceToPlayer());
 	        return change1.compareTo(change2);
 	    }
 	}
@@ -71,7 +72,7 @@ public class SceneManager {
 		entities.add(entity);
 	}
 	
-	public void addLight(Light light){
+	public void addLight(Entity light){
 		lights.add(light);
 	}
 	
