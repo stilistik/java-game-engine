@@ -1,14 +1,12 @@
 package entity;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
 import component.Component;
-import component.ComponentType;
 import tools.Maths;
 
 public class Entity {
@@ -18,7 +16,7 @@ public class Entity {
 	private float scale;
 	private Matrix4f transformationMatrix;
 	
-	private Map<ComponentType, Component> components = new HashMap<ComponentType, Component>();
+	private Map<Class, Component> components = new HashMap<Class, Component>();
 	
 	public Entity(Vector3f position, Vector3f rotation, float scale){
 		this.position = position;
@@ -28,18 +26,18 @@ public class Entity {
 	}
 
 	public void updateComponents(){
-		for (ComponentType type : components.keySet()){
+		for (Class type : components.keySet()){
 			components.get(type).update();
 		}
 	}
 	
 	public void addComponent(Component component){
-		components.put(component.getType(), component);
+		components.put(component.getClass(), component);
 	}
 	
-	public <T extends Component> T getComponent(ComponentType key, Class<T> type){
-		if (components.get(key) != null){
-			return type.cast(components.get(key));
+	public <T extends Component> T getComponent(Class<T> type){
+		if (components.get(type) != null){
+			return type.cast(components.get(type));
 		}else{
 			return null;
 		}

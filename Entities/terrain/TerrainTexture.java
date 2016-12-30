@@ -1,6 +1,5 @@
 package terrain;
 
-import java.awt.image.BufferedImage;
 import java.util.List;
 
 import texture.Texture;

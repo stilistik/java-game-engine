@@ -1,7 +1,6 @@
 package component;
 
 import entity.Entity;
-import texture.Texture;
 
 public class TextureAtlasComponent implements Component {
 	

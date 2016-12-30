@@ -6,19 +6,17 @@ import component.CollisionComponent;
 import component.ModelComponent;
 import component.PlayerComponent;
 import component.TextureAtlasComponent;
-import component.TextureComponent;
 import data.ResFile;
 import entity.Entity;
 import model.Model;
 import objReader.ModelData;
 import objReader.OBJFileLoader;
 import openGL.Vao;
-import skybox.Skybox;
 import texture.Texture;
 
 public class EntityCreator {
 
-	public static Entity createComponentEntity(ResFile entityFile, Vector3f position, Vector3f rotation, float scale, int textureAtlasDimension, int textureIndex){
+	public static Entity createStaticEntity(ResFile entityFile, Vector3f position, Vector3f rotation, float scale, int textureAtlasDimension, int textureIndex){
 		ModelData md = OBJFileLoader.loadOBJ(new ResFile(entityFile, "model.obj"));
 		Texture texture = Texture.newTexture(new ResFile(entityFile, "texture.png")).create();
 		texture.setAtlasDimension(textureAtlasDimension);
@@ -31,7 +29,7 @@ public class EntityCreator {
 		return entity;
 	}
 	
-	public static Entity createComponentPlayer(ResFile entityFile, Vector3f position, Vector3f rotation, float scale){
+	public static Entity createPlayer(ResFile entityFile, Vector3f position, Vector3f rotation, float scale){
 		ModelData md = OBJFileLoader.loadOBJ(new ResFile(entityFile, "model.obj"));
 		Texture texture = Texture.newTexture(new ResFile(entityFile, "texture.png")).create();
 		Vao vao = createVao(md);

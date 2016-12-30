@@ -10,7 +10,6 @@ import component.ComponentType;
 import component.ModelComponent;
 import component.TextureAtlasComponent;
 import entity.Entity;
-import model.Model;
 import shader.EntityShader;
 import texture.Texture;
 
@@ -57,7 +56,7 @@ public class EntityRenderer {
 	private void prepareInstance(Entity entity){
 		Matrix4f transformationMatrix = entity.getTransformationMatrix();
 		shader.loadTransformationMatrix(transformationMatrix);
-		TextureAtlasComponent tac = entity.getComponent(ComponentType.TEXTURE_ATLAS, TextureAtlasComponent.class);
+		TextureAtlasComponent tac = entity.getComponent(TextureAtlasComponent.class);
 		if (tac != null){
 			shader.loadAtlasOffsets(tac.getTextureXOffset(), tac.getTextureYOffset());
 		}else{

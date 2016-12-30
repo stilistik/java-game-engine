@@ -15,7 +15,6 @@ public class CollisionManager {
 	
 	private Entity player;
 	private Camera camera;
-	private SweepAndPrune sap;
 	
 	private List<Entity> dynamicEntities = new ArrayList<Entity>();
 	private List<Entity> staticEntities = new ArrayList<Entity>();
@@ -24,9 +23,7 @@ public class CollisionManager {
 	
 	private int currentTerrainIndex = 0;
 	
-	public CollisionManager() {
-		sap = new SweepAndPrune();
-	}
+	public CollisionManager() {}
 	
 	public void update(){
 		player.updateComponents();
@@ -38,9 +35,9 @@ public class CollisionManager {
 		getCurrentTerrain();
 		float terrainHeight = terrains.get(currentTerrainIndex).getHeightOfTerrain(player.getPosition().x, player.getPosition().z);
 		if (player.getPosition().y < terrainHeight){
-			player.getComponent(ComponentType.PLAYER, PlayerComponent.class).setUpwardsSpeed(0);
+			player.getComponent(PlayerComponent.class).setUpwardsSpeed(0);
 			player.getPosition().y = terrainHeight;
-			player.getComponent(ComponentType.PLAYER, PlayerComponent.class).setInAir(false);
+			player.getComponent(PlayerComponent.class).setInAir(false);
 		}
 		terrainHeight = terrains.get(currentTerrainIndex).getHeightOfTerrain(camera.getPosition().x, camera.getPosition().z);
 		if (camera.getPosition().y < terrainHeight + CAMERA_TERRAIN_COLLISION_OFFSET){

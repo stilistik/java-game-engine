@@ -1,12 +1,9 @@
 package main;
 
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector3f;
 
 import collision.CollisionManager;
-import component.CollisionComponent;
-import component.ComponentType;
 import creator.EntityCreator;
 import creator.TerrainCreator;
 import data.ResFile;
@@ -18,7 +15,6 @@ import light.Sun;
 import player.Camera;
 import sceneManager.SceneManager;
 import terrain.Terrain;
-import texture.Texture;
 
 
 public class Main {
@@ -36,11 +32,11 @@ public class Main {
 		sceneManager.addTerrain(terrain);
 		
 		// entity
-		Entity pineTest = EntityCreator.createComponentEntity(new ResFile("res/entities/fern"), new Vector3f(410, 10, 410), new Vector3f(0,0,0), 1, 2, 1);
+		Entity pineTest = EntityCreator.createStaticEntity(new ResFile("res/entities/fern"), new Vector3f(410, 10, 410), new Vector3f(0,0,0), 1, 2, 1);
 		sceneManager.addEntity(pineTest);
 		
 		// player
-		Entity player = EntityCreator.createComponentPlayer(new ResFile("res/entities/player"), new Vector3f(400,10,400), new Vector3f(0,0,0), 1);
+		Entity player = EntityCreator.createPlayer(new ResFile("res/entities/player"), new Vector3f(400,10,400), new Vector3f(0,0,0), 1);
 		collisionManager.setPlayer(player);
 		sceneManager.setPlayer(player);
 		

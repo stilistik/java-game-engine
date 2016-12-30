@@ -87,7 +87,7 @@ public class MasterRenderer {
 		if (cullFrustum(entity, camera)){
 			return;
 		}
-		ModelComponent modelComponent = entity.getComponent(ComponentType.MODEL, ModelComponent.class);
+		ModelComponent modelComponent = entity.getComponent(ModelComponent.class);
 		List<Entity> batch = entities.get(modelComponent);
 		if(batch != null){
 			batch.add(entity);
@@ -102,7 +102,7 @@ public class MasterRenderer {
 		Matrix4f mat = Maths.createViewMatrix(camera);
 		List<Vector4f> fp_viewSpace = frustum.getFrustumPlanes();	
 		
-		CollisionComponent cc = entity.getComponent(ComponentType.COLLISION, CollisionComponent.class);
+		CollisionComponent cc = entity.getComponent(CollisionComponent.class);
 		
 		float xVal[] = cc.getAABB().getXValues();
 		float yVal[] = cc.getAABB().getYValues();

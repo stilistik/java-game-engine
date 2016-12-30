@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.lwjgl.util.vector.Vector3f;
 
-
 import entity.Entity;
 import light.Light;
 import player.Camera;

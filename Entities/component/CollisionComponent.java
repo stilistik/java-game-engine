@@ -1,7 +1,5 @@
 package component;
 
-import org.lwjgl.util.vector.Vector3f;
-
 import collision.AABB;
 import entity.Entity;
 

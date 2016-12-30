@@ -3,13 +3,9 @@ package renderer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 
-import data.ResFile;
-import model.Model;
-import openGL.Vao;
 import player.Camera;
 import shader.SkyboxShader;
 import skybox.Skybox;
-import texture.Texture;
 
 
 public class SkyboxRenderer {
