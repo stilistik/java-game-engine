@@ -1,32 +1,30 @@
-package player;
+package component;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector3f;
 
 import display.DisplayManager;
-import entities.DynamicEntity;
-import interfaces.Controllable;
-import model.Model;
-import tools.Maths;
+import entity.Entity;
 
-public class Player extends DynamicEntity implements Controllable{
+public class PlayerComponent implements Component{
 	
 	private static final float RUN_SPEED = 80;
 	private static final float TURN_SPEED = 160;
-	private static final float JUMP_POWER = 30;
+	private static final float JUMP_POWER = 80;
 	private static final float GRAVITY = -100;
+	
+	private Entity owner;
 	
 	private float currentSpeed;
 	private float currentTurnSpeed;
 	private float upwardsSpeed;
 	private boolean inAir = false;
 	
-	public Player(Model model, Vector3f position, float rotX, float rotY, float rotZ, float scale,
-			float[] boundingBox) {
-		super(model, position, rotX, rotY, rotZ, scale, boundingBox);
+	
+	public PlayerComponent(Entity owner){
+		this.owner = owner;
 	}
-
-	@Override
+	
 	public void checkInputs() {
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)){
 			currentSpeed = RUN_SPEED;
@@ -48,25 +46,44 @@ public class Player extends DynamicEntity implements Controllable{
 			jump();
 		}
 	}
-
-	@Override
+	
 	public void move() {
 		checkInputs();
 		float t = DisplayManager.getFrameTimeSeconds();
 		increaseRotation(0, currentTurnSpeed * t, 0);
 		float distance = currentSpeed * t;
 		upwardsSpeed += GRAVITY * t;
-		float dx = (float) (distance * Math.sin(Math.toRadians(super.getRotY())));
-		float dz = (float) (distance * Math.cos(Math.toRadians(super.getRotY())));
+		float dx = (float) (distance * Math.sin(Math.toRadians(owner.getRotY())));
+		float dz = (float) (distance * Math.cos(Math.toRadians(owner.getRotY())));
 		float dy = upwardsSpeed * t;
 		increasePosition(dx, dy, dz);	
 		updateTransformation();
-		aabb.update(transformationMatrix);
+	}
+	
+	private void increasePosition(float dx, float dy, float dz){
+		Vector3f position = owner.getPosition();
+		position.x += dx;
+		position.y += dy;
+		position.z += dz;
+		owner.setPosition(position);
+	}
+	
+	private void increaseRotation(float dRotX, float dRotY, float dRotZ){
+		Vector3f rotation = owner.getRotation();
+		rotation.x += dRotX;
+		rotation.y += dRotY;
+		rotation.z += dRotZ;
+		owner.setRotation(rotation);
+	}
+	
+	private void updateTransformation(){
+		owner.updateTransformation();
 	}
 
 	@Override
-	public void updateTransformation() {
-		this.transformationMatrix = Maths.createTransformationMatrix(position, rotX, rotY, rotZ, scale);
+	public void update() {
+		checkInputs();
+		move();
 	}
 	
 	private void jump(){
@@ -91,4 +108,10 @@ public class Player extends DynamicEntity implements Controllable{
 	public void setInAir(boolean inAir) {
 		this.inAir = inAir;
 	}
+
+	@Override
+	public ComponentType getType() {
+		return ComponentType.PLAYER;
+	}
+
 }

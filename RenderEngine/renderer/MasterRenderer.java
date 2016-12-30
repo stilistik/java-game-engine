@@ -9,15 +9,14 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector4f;
 
-import entities.DynamicEntity;
-import entities.Entity;
-import entities.StaticEntity;
+import component.CollisionComponent;
+import component.ComponentType;
+import component.ModelComponent;
+import entity.Entity;
 import light.Light;
-import model.Model;
 import player.Camera;
-import shader.DynamicEntityShader;
+import shader.EntityShader;
 import shader.SkyboxShader;
-import shader.StaticEntityShader;
 import shader.TerrainShader;
 import terrain.Terrain;
 import tools.Maths;
@@ -30,11 +29,8 @@ public class MasterRenderer {
 		
 	private Frustum frustum;
 	
-	private StaticEntityShader staticEntityShader;
-	private StaticEntityRenderer staticEntityRenderer;
-	
-	private DynamicEntityShader dynamicEntityShader;
-	private DynamicEntityRenderer dynamicEntityRenderer;
+	private EntityShader entityShader;
+	private EntityRenderer entityRenderer;
 
 	private TerrainShader terrainShader;
 	private TerrainRenderer terrainRenderer;
@@ -42,17 +38,14 @@ public class MasterRenderer {
 	private SkyboxRenderer skyboxRenderer;
 	private SkyboxShader skyboxShader;
 	
-	private Map<Model, List<DynamicEntity>> dynamicEntities = new HashMap<Model, List<DynamicEntity>>();
-	private Map<Model, List<StaticEntity>> staticEntities = new HashMap<Model, List<StaticEntity>>();
+	private Map<ModelComponent, List<Entity>> entities = new HashMap<ModelComponent, List<Entity>>();
 	private List<Terrain> terrains = new ArrayList<Terrain>();
 	
 	public MasterRenderer(){
 		enableCulling();
-		frustum = new Frustum();
-		staticEntityShader = new StaticEntityShader();
-		staticEntityRenderer = new StaticEntityRenderer(staticEntityShader, frustum.getProjectionMatrix());
-		dynamicEntityShader = new DynamicEntityShader();
-		dynamicEntityRenderer = new DynamicEntityRenderer(dynamicEntityShader, frustum.getProjectionMatrix());		
+		frustum = new Frustum();	
+		entityShader = new EntityShader();
+		entityRenderer = new EntityRenderer(entityShader, frustum.getProjectionMatrix());
 		terrainShader = new TerrainShader();
 		terrainRenderer = new TerrainRenderer(terrainShader, frustum.getProjectionMatrix());
 		skyboxShader = new SkyboxShader();
@@ -61,20 +54,13 @@ public class MasterRenderer {
 	
 	public void render(List<Light> lights, Camera camera){
 		prepare();
-
-		staticEntityShader.start();
-		staticEntityShader.loadSkyColor(RED, GREEN, BLUE);
-		staticEntityShader.loadLights(lights);
-		staticEntityShader.loadViewMatrix(camera);
-		staticEntityRenderer.render(staticEntities);
-		staticEntityShader.stop();
 		
-		dynamicEntityShader.start();
-		dynamicEntityShader.loadSkyColor(RED, GREEN, BLUE);
-		dynamicEntityShader.loadLights(lights);
-		dynamicEntityShader.loadViewMatrix(camera);
-		dynamicEntityRenderer.render(dynamicEntities);
-		dynamicEntityShader.stop();
+		entityShader.start();
+		entityShader.loadSkyColor(RED, GREEN, BLUE);
+		entityShader.loadLights(lights);
+		entityShader.loadViewMatrix(camera);
+		entityRenderer.render(entities);
+		entityShader.stop();
 		
 		terrainShader.start();
 		terrainShader.loadSkyColor(RED, GREEN, BLUE);
@@ -89,8 +75,7 @@ public class MasterRenderer {
 	}
 	
 	private void clearMaps(){
-		staticEntities.clear();
-		dynamicEntities.clear();
+		entities.clear();
 		terrains.clear();
 	}
 	
@@ -98,33 +83,18 @@ public class MasterRenderer {
 		terrains.add(terrain);
 	}
 	
-	public void processStaticEntity(StaticEntity entity, Camera camera){
+	public void processComponentEntity(Entity entity, Camera camera){
 		if (cullFrustum(entity, camera)){
 			return;
 		}
-		Model model = entity.getModel();
-		List<StaticEntity> batch = staticEntities.get(model);
+		ModelComponent modelComponent = entity.getComponent(ComponentType.MODEL, ModelComponent.class);
+		List<Entity> batch = entities.get(modelComponent);
 		if(batch != null){
 			batch.add(entity);
 		}else{
-			List<StaticEntity> newBatch = new ArrayList<StaticEntity>();
+			List<Entity> newBatch = new ArrayList<Entity>();
 			newBatch.add(entity);
-			staticEntities.put(model, newBatch);
-		}
-	}
-	
-	public void processDynamicEntity(DynamicEntity entity, Camera camera){
-		if (cullFrustum(entity, camera)){
-			return;
-		}
-		Model model = entity.getModel();
-		List<DynamicEntity> batch = dynamicEntities.get(model);
-		if(batch != null){
-			batch.add(entity);
-		}else{
-			List<DynamicEntity> newBatch = new ArrayList<DynamicEntity>();
-			newBatch.add(entity);
-			dynamicEntities.put(model, newBatch);
+			entities.put(modelComponent, newBatch);
 		}
 	}
 	
@@ -132,9 +102,11 @@ public class MasterRenderer {
 		Matrix4f mat = Maths.createViewMatrix(camera);
 		List<Vector4f> fp_viewSpace = frustum.getFrustumPlanes();	
 		
-		float xVal[] = entity.getAABB().getXValues();
-		float yVal[] = entity.getAABB().getYValues();
-		float zVal[] = entity.getAABB().getZValues();
+		CollisionComponent cc = entity.getComponent(ComponentType.COLLISION, CollisionComponent.class);
+		
+		float xVal[] = cc.getAABB().getXValues();
+		float yVal[] = cc.getAABB().getYValues();
+		float zVal[] = cc.getAABB().getZValues();
 		
 		for (Vector4f normal_viewSpace : fp_viewSpace){
 			int px = (normal_viewSpace.x > 0) ? 1 : 0;
@@ -171,8 +143,6 @@ public class MasterRenderer {
 	}
 	
 	public void cleanUp(){
-		staticEntityShader.cleanUp();
-		dynamicEntityShader.cleanUp();
 		terrainShader.cleanUp();
 		skyboxShader.cleanUp();
 	}

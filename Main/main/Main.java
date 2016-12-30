@@ -5,16 +5,17 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector3f;
 
 import collision.CollisionManager;
+import component.CollisionComponent;
+import component.ComponentType;
 import creator.EntityCreator;
 import creator.TerrainCreator;
 import data.ResFile;
 import display.DisplayManager;
-import entities.StaticEntity;
+import entity.Entity;
 import gameStateManager.GameStateManager;
 import gameStateManager.GameStateManager.GameState;
 import light.Sun;
 import player.Camera;
-import player.Player;
 import sceneManager.SceneManager;
 import terrain.Terrain;
 import texture.Texture;
@@ -28,18 +29,18 @@ public class Main {
 	
 		CollisionManager collisionManager = new CollisionManager();
 		SceneManager sceneManager = new SceneManager();
-		
+				
 		// terrain
 		Terrain terrain = TerrainCreator.createTerrainRandom(new ResFile("res/terrain/forest"), "forest", 0, 0);
 		collisionManager.addTerrain(terrain);
 		sceneManager.addTerrain(terrain);
 		
-		// entities
-		StaticEntity pine = EntityCreator.createStaticEntity(new ResFile("res/entities/pine"), new Vector3f(410,terrain.getHeightOfTerrain(410, 410),410),0,0,0,1);	
-		sceneManager.addStaticEntity(pine);
+		// entity
+		Entity pineTest = EntityCreator.createComponentEntity(new ResFile("res/entities/fern"), new Vector3f(410, 10, 410), new Vector3f(0,0,0), 1, 2, 1);
+		sceneManager.addEntity(pineTest);
 		
 		// player
-		Player player = EntityCreator.createPlayer(new ResFile("res/entities/player"), new Vector3f(400,10,400), 0, 0, 0, 1);
+		Entity player = EntityCreator.createComponentPlayer(new ResFile("res/entities/player"), new Vector3f(400,10,400), new Vector3f(0,0,0), 1);
 		collisionManager.setPlayer(player);
 		sceneManager.setPlayer(player);
 		
@@ -53,8 +54,6 @@ public class Main {
 		sceneManager.addLight(sun);
 		
 		while(GameStateManager.getCurrentState() != GameState.CLOSE_REQUESTED){
-			player.move();
-			camera.move();
 			collisionManager.update();
 			sceneManager.update();
 			sceneManager.renderScene();

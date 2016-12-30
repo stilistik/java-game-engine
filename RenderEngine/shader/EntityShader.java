@@ -10,7 +10,7 @@ import light.Light;
 import player.Camera;
 import tools.Maths;
 
-public class StaticEntityShader extends ShaderProgram{
+public class EntityShader extends ShaderProgram{
 
 	private static final String VERTEX_FILE = SHADER_LOCATION + "entityVertexShader.txt";
 	private static final String FRAGMENT_FILE = SHADER_LOCATION + "entityFragmentShader.txt";
@@ -31,7 +31,7 @@ public class StaticEntityShader extends ShaderProgram{
 	private int location_atlasOffsets;
 	
 	
-	public StaticEntityShader() {
+	public EntityShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
 	}
 

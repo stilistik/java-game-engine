@@ -6,23 +6,21 @@ import java.util.List;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import entities.DynamicEntity;
-import entities.StaticEntity;
+
+import entity.Entity;
 import light.Light;
 import player.Camera;
-import player.Player;
 import renderer.MasterRenderer;
 import terrain.Terrain;
 
 public class SceneManager {
 	
-	private Player player;
+	private Entity player;
 	private Camera camera;
 	
 	private MasterRenderer renderer = new MasterRenderer();
 	
-	private List<StaticEntity> staticEntities = new ArrayList<StaticEntity>();
-	private List<DynamicEntity> dynamicEntities = new ArrayList<DynamicEntity>();
+	private List<Entity> entities = new ArrayList<Entity>();
 	private List<Light> lights = new ArrayList<Light>();
 	private List<Terrain> terrains = new ArrayList<Terrain>();
 	
@@ -34,11 +32,8 @@ public class SceneManager {
 	
 	public void renderScene(){
 		renderer.prepare();
-		for (StaticEntity entity : staticEntities){
-			renderer.processStaticEntity(entity, camera);
-		}
-		for (DynamicEntity entity : dynamicEntities){
-			renderer.processDynamicEntity(entity, camera);
+		for (Entity entity : entities){
+			renderer.processComponentEntity(entity, camera);
 		}
 		for (Terrain terrain : terrains){
 			renderer.processTerrain(terrain);
@@ -64,21 +59,17 @@ public class SceneManager {
 	    }
 	}
 	
-	public void setPlayer(Player p){
+	public void setPlayer(Entity p){
 		player = p;
-		dynamicEntities.add(p);
+		entities.add(p);
 	}
 	
 	public void setCamera(Camera cam){
 		camera = cam;
 	}
 	
-	public void addStaticEntity(StaticEntity entity){
-		staticEntities.add(entity);
-	}
-	
-	public void addDynamicEntity(DynamicEntity entity){
-		dynamicEntities.add(entity);
+	public void addEntity(Entity entity){
+		entities.add(entity);
 	}
 	
 	public void addLight(Light light){

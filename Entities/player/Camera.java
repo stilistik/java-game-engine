@@ -4,6 +4,8 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
+import entity.Entity;
+
 public class Camera {
 	
 	private static final float MOUSE_SENSITIVITY = 0.1f;
@@ -11,7 +13,7 @@ public class Camera {
 	private static final float MAX_ZOOM = 200;
 	private static final float MIN_ZOOM = 20;
 	
-	private Player player;
+	private Entity player;
 	
 	private Vector3f position = new Vector3f(0,0,0);
 	private float distanceFromPlayer = 50;
@@ -20,7 +22,7 @@ public class Camera {
 	private float yaw; 
 	private float roll;
 		
-	public Camera(Player player){
+	public Camera(Entity player){
 		this.player = player;
 	}
 	

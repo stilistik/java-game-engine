@@ -2,41 +2,45 @@ package creator;
 
 import org.lwjgl.util.vector.Vector3f;
 
+import component.CollisionComponent;
+import component.ModelComponent;
+import component.PlayerComponent;
+import component.TextureAtlasComponent;
+import component.TextureComponent;
 import data.ResFile;
-import entities.DynamicEntity;
-import entities.StaticEntity;
+import entity.Entity;
 import model.Model;
 import objReader.ModelData;
 import objReader.OBJFileLoader;
 import openGL.Vao;
-import player.Player;
 import skybox.Skybox;
 import texture.Texture;
 
 public class EntityCreator {
-	
-	public static StaticEntity createStaticEntity(ResFile entityFile, Vector3f position, float rotX, float rotY, float rotZ, float scale){
+
+	public static Entity createComponentEntity(ResFile entityFile, Vector3f position, Vector3f rotation, float scale, int textureAtlasDimension, int textureIndex){
 		ModelData md = OBJFileLoader.loadOBJ(new ResFile(entityFile, "model.obj"));
 		Texture texture = Texture.newTexture(new ResFile(entityFile, "texture.png")).create();
+		texture.setAtlasDimension(textureAtlasDimension);
 		Vao vao = createVao(md);
 		Model model = new Model(vao, texture);
-		return new StaticEntity(model, position, rotX, rotY, rotZ, scale, md.getBoundingBox());
+		Entity entity = new Entity(position, rotation, scale);
+		entity.addComponent(new ModelComponent(entity, model));
+		entity.addComponent(new TextureAtlasComponent(entity, textureAtlasDimension, textureIndex));
+		entity.addComponent(new CollisionComponent(entity, md.getBoundingBox()));
+		return entity;
 	}
 	
-	public static DynamicEntity createDynamicEntity(ResFile entityFile, Vector3f position, float rotX, float rotY, float rotZ, float scale){
+	public static Entity createComponentPlayer(ResFile entityFile, Vector3f position, Vector3f rotation, float scale){
 		ModelData md = OBJFileLoader.loadOBJ(new ResFile(entityFile, "model.obj"));
 		Texture texture = Texture.newTexture(new ResFile(entityFile, "texture.png")).create();
 		Vao vao = createVao(md);
 		Model model = new Model(vao, texture);
-		return new Player(model, position, rotX, rotY, rotZ, scale, md.getBoundingBox());
-	}	
-	
-	public static Player createPlayer(ResFile entityFile, Vector3f position, float rotX, float rotY, float rotZ, float scale){
-		ModelData md = OBJFileLoader.loadOBJ(new ResFile(entityFile, "model.obj"));
-		Texture texture = Texture.newTexture(new ResFile(entityFile, "texture.png")).create();
-		Vao vao = createVao(md);
-		Model model = new Model(vao, texture);
-		return new Player(model, position, rotX, rotY, rotZ, scale, md.getBoundingBox());
+		Entity entity = new Entity(position, rotation, scale);
+		entity.addComponent(new ModelComponent(entity, model));
+		entity.addComponent(new CollisionComponent(entity, md.getBoundingBox()));
+		entity.addComponent(new PlayerComponent(entity));
+		return entity;	
 	}
 	
 	private static Vao createVao(ModelData md){
