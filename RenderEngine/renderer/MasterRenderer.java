@@ -83,7 +83,7 @@ public class MasterRenderer {
 		terrains.add(terrain);
 	}
 	
-	public void processComponentEntity(Entity entity, Camera camera){
+	public void processEntity(Entity entity, Camera camera){
 		if (cullFrustum(entity, camera)){
 			return;
 		}

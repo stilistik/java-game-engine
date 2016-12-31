@@ -27,6 +27,14 @@ public class TextureAtlasComponent implements Component {
 		return (float) row / (float) textureAtlasDimension;
 	}
 
+	public int getTextureAtlasDimension() {
+		return textureAtlasDimension;
+	}
+
+	public void setTextureAtlasDimension(int textureAtlasDimension) {
+		this.textureAtlasDimension = textureAtlasDimension;
+	}
+
 	public int getTextureIndex() {
 		return textureIndex;
 	}

@@ -10,11 +10,16 @@ public class Scene {
 
 	private Terrain terrain;
 	private List<Entity> entities = new ArrayList<Entity>();
+	private List<Entity> lights = new ArrayList<Entity>();
 	
 	public Scene () {}
 	
 	public void addEntity(Entity entity){
 		entities.add(entity);
+	}
+	
+	public void addLight(Entity light){
+		lights.add(light);
 	}
 	
 	public void setTerrain(Terrain terrain){
@@ -27,5 +32,9 @@ public class Scene {
 	
 	public List<Entity> getEntities(){
 		return entities;
+	}
+	
+	public List<Entity> getLights(){
+		return lights;
 	}
 }

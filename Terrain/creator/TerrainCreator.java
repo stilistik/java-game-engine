@@ -6,18 +6,36 @@ import java.util.List;
 import java.util.Map;
 
 import data.ResFile;
+import terrain.Terrain;
 import terrain.TerrainTexture;
 import texture.Texture;
 
-public class TerrainTextureLoader {
+public class TerrainCreator {	
 	
 	private static Map<String, TerrainTexture> textures = new HashMap<String, TerrainTexture>();
-
-	public static TerrainTexture createTerrainTexture(ResFile terrainFile){
-		TerrainTexture texture = null;
-		if ((texture = textures.get(terrainFile.toString())) != null){
-			return texture;
+	
+	public static Terrain createTerrainFromHeightMap(ResFile terrainFile, int gridX, int gridZ){
+		TerrainTexture texture = createTerrainTexture(terrainFile);
+		TerrainGeneratorHeightMap generator = new TerrainGeneratorHeightMap(terrainFile);
+		return new Terrain(gridX, gridZ, generator.getVao(), texture, generator.getHeights());
+	}
+	
+	public static Terrain createTerrainRandom(ResFile terrainFile, int gridX, int gridZ){
+		TerrainTexture texture = createTerrainTexture(terrainFile);
+		TerrainGeneratorRandom generator = new TerrainGeneratorRandom();
+		return new Terrain(gridX, gridZ, generator.getVao(), texture, generator.getHeights());
+	}
+	
+	private static TerrainTexture createTerrainTexture(ResFile terrainFile){
+		TerrainTexture texture = textures.get(terrainFile.toString());
+		if (texture == null){
+			texture = loadTexture(terrainFile);
+			textures.put(terrainFile.toString(), texture);
 		}		
+		return texture;
+	}	
+	
+	private static TerrainTexture loadTexture(ResFile terrainFile){
 		List<Texture> terrainTextures = new ArrayList<Texture>();
 		List<Texture> terrainTextureMaps = new ArrayList<Texture>();
 		terrainTextures.add(Texture.newTexture(new ResFile(terrainFile, "textures", "texture0.png")).create());
@@ -28,9 +46,6 @@ public class TerrainTextureLoader {
 		terrainTextureMaps.add(Texture.newTexture(new ResFile(terrainFile, "maps", "map1.png")).create());
 		terrainTextureMaps.add(Texture.newTexture(new ResFile(terrainFile, "maps", "map2.png")).create());
 		terrainTextureMaps.add(Texture.newTexture(new ResFile(terrainFile, "maps", "map3.png")).create());	
-		texture =  new TerrainTexture(terrainTextures, terrainTextureMaps);
-		textures.put(terrainFile.toString(), texture);
-		return texture;
-	}	
-	
+		return new TerrainTexture(terrainTextures, terrainTextureMaps); 
+	}
 }

@@ -28,11 +28,11 @@ public class EntityCreator {
 		return entity;
 	}
 
-	public static Entity createStaticEntity(String name, ResFile entityFile, Vector3f position, Vector3f rotation, float scale, int textureAtlasDimension, int textureIndex){
-		Model model = models.get(name);
+	public static Entity createStaticEntity(ResFile entityFile, Vector3f position, Vector3f rotation, float scale, int textureAtlasDimension, int textureIndex){
+		Model model = models.get(entityFile.toString());
 		if (model == null){
-			model = loadModel(name, entityFile);
-			models.put(name, model);
+			model = loadModel(entityFile);
+			models.put(entityFile.toString(), model);
 		}		
 		Entity entity = new Entity(position, rotation, scale);
 		entity.addComponent(new ModelComponent(entity, model));
@@ -53,7 +53,7 @@ public class EntityCreator {
 		return entity;	
 	}
 	
-	private static Model loadModel(String name, ResFile entityFile){
+	private static Model loadModel(ResFile entityFile){
 		ModelData md = OBJFileLoader.loadOBJ(new ResFile(entityFile, "model.obj"));
 		Texture texture = Texture.newTexture(new ResFile(entityFile, "texture.png")).create();
 		Vao vao = createVao(md);

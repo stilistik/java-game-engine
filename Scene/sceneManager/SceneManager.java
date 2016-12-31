@@ -11,6 +11,7 @@ import entity.Entity;
 import light.Light;
 import player.Camera;
 import renderer.MasterRenderer;
+import scene.Scene;
 import terrain.Terrain;
 
 public class SceneManager {
@@ -20,9 +21,7 @@ public class SceneManager {
 	
 	private MasterRenderer renderer = new MasterRenderer();
 	
-	private List<Entity> entities = new ArrayList<Entity>();
-	private List<Entity> lights = new ArrayList<Entity>();
-	private List<Terrain> terrains = new ArrayList<Terrain>();
+	private Scene scene;
 	
 	public SceneManager(){}
 	
@@ -32,22 +31,21 @@ public class SceneManager {
 	
 	public void renderScene(){
 		renderer.prepare();
-		for (Entity entity : entities){
-			renderer.processComponentEntity(entity, camera);
+		for (Entity entity : scene.getEntities()){
+			renderer.processEntity(entity, camera);
 		}
-		for (Terrain terrain : terrains){
-			renderer.processTerrain(terrain);
-		}
-		renderer.render(lights, camera);		
+		renderer.processEntity(player, camera);
+		renderer.processTerrain(scene.getTerrain());
+		renderer.render(scene.getLights(), camera);		
 	}
 	
 	private void sortLights(){
-		for (Entity light : lights){
+		for (Entity light : scene.getLights()){
 			Vector3f v = new Vector3f();
 			Vector3f.sub(light.getPosition(), player.getPosition(), v);
 			light.getComponent(LightComponent.class).setDistanceToPlayer(v.length());
 		}
-		lights.sort(new LightDistanceSort());	
+		scene.getLights().sort(new LightDistanceSort());	
 	}
 	
 	class LightDistanceSort implements Comparator<Entity>
@@ -61,22 +59,13 @@ public class SceneManager {
 	
 	public void setPlayer(Entity p){
 		player = p;
-		entities.add(p);
 	}
 	
 	public void setCamera(Camera cam){
 		camera = cam;
 	}
 	
-	public void addEntity(Entity entity){
-		entities.add(entity);
-	}
-	
-	public void addLight(Entity light){
-		lights.add(light);
-	}
-	
-	public void addTerrain(Terrain terrain){
-		terrains.add(terrain);
+	public void setScene(Scene scene){
+		this.scene = scene;
 	}
 }

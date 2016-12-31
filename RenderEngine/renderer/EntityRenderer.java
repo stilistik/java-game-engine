@@ -42,7 +42,6 @@ public class EntityRenderer {
 		if (texture.isTransparency()){
 			MasterRenderer.disableCulling();
 		}
-		shader.loadAtlasDimension(texture.getAtlasDimension());
 		shader.loadFakeLightingVariable(texture.isFakeLight());
 		shader.loadShineVariables(texture.getShineDamper(), texture.getReflectivity());
 		texture.bindToUnit(0);
@@ -58,6 +57,7 @@ public class EntityRenderer {
 		shader.loadTransformationMatrix(transformationMatrix);
 		TextureAtlasComponent tac = entity.getComponent(TextureAtlasComponent.class);
 		if (tac != null){
+			shader.loadAtlasDimension(tac.getTextureAtlasDimension());
 			shader.loadAtlasOffsets(tac.getTextureXOffset(), tac.getTextureYOffset());
 		}else{
 			shader.loadAtlasOffsets(0, 0);
