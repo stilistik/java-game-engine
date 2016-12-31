@@ -9,12 +9,10 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector4f;
 
+import Camera.Camera;
 import component.CollisionComponent;
-import component.ComponentType;
 import component.ModelComponent;
 import entity.Entity;
-import light.Light;
-import player.Camera;
 import shader.EntityShader;
 import shader.SkyboxShader;
 import shader.TerrainShader;

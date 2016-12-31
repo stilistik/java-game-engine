@@ -1,32 +1,25 @@
 package sceneCreator;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import org.lwjgl.util.vector.Vector3f;
 
 import creator.EntityCreator;
 import creator.TerrainCreator;
-import data.ResFile;
+import csvReader.CSVreader;
 import entity.Entity;
-import general.Settings;
+import fileSystem.ResFile;
 import scene.Scene;
 import terrain.Terrain;
 
 public class SceneCreator{
-	
-	private static Random random = new Random();
-	
+		
 	public static Scene loadScene(ResFile sceneFile){
 		Scene scene = new Scene();
 		
 		// data
-		ResFile dataFile = new ResFile(sceneFile, "entities/entityDataCSV.csv");
-		List<float[]> data = readEntityData(dataFile);
+		ResFile dataFile = new ResFile(sceneFile, "entities/entityData.csv");
+		List<float[]> data = CSVreader.readFloatCSV(dataFile);
 		
 		// terrain
 		ResFile terrainFile = new ResFile(sceneFile, "terrain");
@@ -53,32 +46,6 @@ public class SceneCreator{
 		scene.addLight(sun);;
 		
 		return scene;
-	}
-	
-	private static List<float[]> readEntityData(ResFile dataFile){
-		ArrayList<float[]> data = new ArrayList<float[]>();
-		try {
-			BufferedReader reader = new BufferedReader(new FileReader(Settings.RES_LOC+dataFile.toString()));
-			reader.readLine();
-			String line;
-			while ((line = reader.readLine()) != null){
-				String[] lineFragments = line.split(";");
-				if (lineFragments.length == 0){
-					continue;
-				}
-				float[] lineData = new float[lineFragments.length];
-				for (int i = 0; i < lineData.length; i++){
-					lineData[i] = Float.parseFloat(lineFragments[i]);
-				}
-				data.add(lineData);
-			}
-			reader.close();
-		} catch (Exception e) {
-			System.err.println("Could not read scene data file.");
-			e.printStackTrace();
-		}
-		return data;
-	}
-	
+	}	
 
 }

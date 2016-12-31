@@ -3,8 +3,8 @@ package shader;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
+import Camera.Camera;
 import display.DisplayManager;
-import player.Camera;
 import tools.Maths;
 
 public class SkyboxShader extends ShaderProgram{

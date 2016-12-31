@@ -6,10 +6,9 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+import Camera.Camera;
 import component.LightComponent;
 import entity.Entity;
-import light.Light;
-import player.Camera;
 import tools.Maths;
 
 public class EntityShader extends ShaderProgram{

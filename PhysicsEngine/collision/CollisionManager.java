@@ -1,14 +1,9 @@
 package collision;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import component.ComponentType;
+import Camera.Camera;
 import component.PlayerComponent;
 import entity.Entity;
-import player.Camera;
 import scene.Scene;
-import terrain.Terrain;
 
 public class CollisionManager {
 	

@@ -3,7 +3,7 @@ package texture;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 
-import data.ResFile;
+import fileSystem.ResFile;
 
 public class Texture {
 

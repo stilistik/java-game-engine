@@ -3,7 +3,7 @@ package renderer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 
-import player.Camera;
+import Camera.Camera;
 import shader.SkyboxShader;
 import skybox.Skybox;
 

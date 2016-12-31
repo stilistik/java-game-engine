@@ -1,6 +1,6 @@
 package texture;
 
-import data.ResFile;
+import fileSystem.ResFile;
 
 public class TextureBuilder {
 	

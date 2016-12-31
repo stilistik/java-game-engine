@@ -6,7 +6,6 @@ import java.util.Map;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 
-import component.ComponentType;
 import component.ModelComponent;
 import component.TextureAtlasComponent;
 import entity.Entity;

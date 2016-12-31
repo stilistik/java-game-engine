@@ -1,4 +1,4 @@
-package player;
+package Camera;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;

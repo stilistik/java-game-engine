@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import data.ResFile;
+import fileSystem.ResFile;
 import terrain.Terrain;
 import terrain.TerrainTexture;
 import texture.Texture;

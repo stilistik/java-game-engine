@@ -1,4 +1,0 @@
-EntityNumber InstanceCount Scale AtlasDimensions TextureIndex
-0 400 2 1 0
-1 1200 1 1 0
-2 1200 1 2 3

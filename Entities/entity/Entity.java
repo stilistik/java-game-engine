@@ -16,7 +16,7 @@ public class Entity {
 	private float scale;
 	private Matrix4f transformationMatrix;
 	
-	private Map<Class, Component> components = new HashMap<Class, Component>();
+	private ComponentContainer components = new ComponentContainer();
 	
 	public Entity(Vector3f position, Vector3f rotation, float scale){
 		this.position = position;
@@ -26,9 +26,7 @@ public class Entity {
 	}
 
 	public void updateComponents(){
-		for (Class type : components.keySet()){
-			components.get(type).update();
-		}
+		components.update();
 	}
 	
 	public void addComponent(Component component){
@@ -36,11 +34,7 @@ public class Entity {
 	}
 	
 	public <T extends Component> T getComponent(Class<T> type){
-		if (components.get(type) != null){
-			return type.cast(components.get(type));
-		}else{
-			return null;
-		}
+		return components.get(type);
 	}
 	
 	public Vector3f getPosition() {
@@ -87,4 +81,22 @@ public class Entity {
 		this.transformationMatrix = Maths.createTransformationMatrix(position, rotation.x, rotation.y, rotation.z, scale);
 	}
 	
+	private class ComponentContainer {
+		  private Map<Class<?>, Component> components =
+		    new HashMap<Class<?>, Component>();
+
+		  public <T> void put(Class<T> c, Component component) {
+		    components.put(c, component);
+		  }
+
+		  public <T> T get(Class<T> c) {
+		    return c.cast(components.get(c));
+		  }
+		  
+		  public void update(){
+				for (Class<?> type : components.keySet()){
+					((Component) components.get(type)).update();
+				}
+		  }
+	}
 }

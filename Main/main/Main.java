@@ -1,25 +1,19 @@
 package main;
 
 
-import java.util.Random;
-
 import org.lwjgl.util.vector.Vector3f;
 
+import Camera.Camera;
 import collision.CollisionManager;
-import component.TextureAtlasComponent;
 import creator.EntityCreator;
-import creator.TerrainCreator;
-import data.ResFile;
 import display.DisplayManager;
 import entity.Entity;
+import fileSystem.ResFile;
 import gameStateManager.GameStateManager;
 import gameStateManager.GameStateManager.GameState;
-import light.Sun;
-import player.Camera;
 import scene.Scene;
 import sceneCreator.SceneCreator;
 import sceneManager.SceneManager;
-import terrain.Terrain;
 
 
 public class Main {
