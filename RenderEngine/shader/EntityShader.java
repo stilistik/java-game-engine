@@ -16,7 +16,7 @@ public class EntityShader extends ShaderProgram{
 	private static final String VERTEX_FILE = SHADER_LOCATION + "entityVertexShader.txt";
 	private static final String FRAGMENT_FILE = SHADER_LOCATION + "entityFragmentShader.txt";
 	
-	public static final int MAX_LIGHTS = 6;
+	public static final int MAX_LIGHTS = 20;
 	
 	private int location_transformationMatrix;
 	private int location_projectionMatrix;

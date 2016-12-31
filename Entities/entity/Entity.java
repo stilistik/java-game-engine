@@ -7,10 +7,12 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
 import component.Component;
+import component.ComponentContainer;
 import tools.Maths;
 
 public class Entity {
 	
+	private final int id;
 	private Vector3f position;
 	private Vector3f rotation;
 	private float scale;
@@ -18,7 +20,8 @@ public class Entity {
 	
 	private ComponentContainer components = new ComponentContainer();
 	
-	public Entity(Vector3f position, Vector3f rotation, float scale){
+	public Entity(int id, Vector3f position, Vector3f rotation, float scale){
+		this.id = id;
 		this.position = position;
 		this.rotation = rotation;
 		this.scale = scale;
@@ -81,22 +84,7 @@ public class Entity {
 		this.transformationMatrix = Maths.createTransformationMatrix(position, rotation.x, rotation.y, rotation.z, scale);
 	}
 	
-	private class ComponentContainer {
-		  private Map<Class<?>, Component> components =
-		    new HashMap<Class<?>, Component>();
-
-		  public <T> void put(Class<T> c, Component component) {
-		    components.put(c, component);
-		  }
-
-		  public <T> T get(Class<T> c) {
-		    return c.cast(components.get(c));
-		  }
-		  
-		  public void update(){
-				for (Class<?> type : components.keySet()){
-					((Component) components.get(type)).update();
-				}
-		  }
+	public int getId() {
+		return id;
 	}
 }

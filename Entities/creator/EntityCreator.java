@@ -11,10 +11,10 @@ import component.ModelComponent;
 import component.PlayerComponent;
 import component.TextureAtlasComponent;
 import entity.Entity;
-import fileSystem.ResFile;
+import file.ResFile;
 import model.Model;
-import objReader.ModelData;
-import objReader.OBJFileLoader;
+import obj.ModelData;
+import obj.OBJFileLoader;
 import openGL.Vao;
 import texture.Texture;
 
@@ -22,31 +22,34 @@ public class EntityCreator {
 	
 	private static Map<String, Model> models = new HashMap<String, Model>();
 	
-	public static Entity createLight(Vector3f position, Vector3f color, Vector3f attenuation){
-		Entity entity = new Entity(position, new Vector3f(0,0,0),1);
+	public static Entity createLight(int id, Vector3f position, Vector3f color, Vector3f attenuation){
+		Entity entity = new Entity(id, position, new Vector3f(0,0,0),1);
 		entity.addComponent(new LightComponent(entity, color, attenuation));
 		return entity;
 	}
 
-	public static Entity createStaticEntity(ResFile entityFile, Vector3f position, Vector3f rotation, float scale, int textureAtlasDimension, int textureIndex){
+	public static Entity createStaticEntity(ResFile entityFile, int id, Vector3f position, Vector3f rotation, float scale,
+											int textureAtlasDimension, int textureIndex, boolean fakeLight, boolean transparent){
 		Model model = models.get(entityFile.toString());
 		if (model == null){
 			model = loadModel(entityFile);
 			models.put(entityFile.toString(), model);
 		}		
-		Entity entity = new Entity(position, rotation, scale);
+		model.getTexture().setTransparency(transparent);
+		model.getTexture().setFakeLight(fakeLight);
+		Entity entity = new Entity(id, position, rotation, scale);
 		entity.addComponent(new ModelComponent(entity, model));
 		entity.addComponent(new TextureAtlasComponent(entity, textureAtlasDimension, textureIndex));
 		entity.addComponent(new CollisionComponent(entity, model.getBoundingBox()));
 		return entity;
 	}
 	
-	public static Entity createPlayer(ResFile entityFile, Vector3f position, Vector3f rotation, float scale){
+	public static Entity createPlayer(ResFile entityFile, int id, Vector3f position, Vector3f rotation, float scale){
 		ModelData md = OBJFileLoader.loadOBJ(new ResFile(entityFile, "model.obj"));
 		Texture texture = Texture.newTexture(new ResFile(entityFile, "texture.png")).create();
 		Vao vao = createVao(md);
 		Model model = new Model(vao, texture, md.getBoundingBox());
-		Entity entity = new Entity(position, rotation, scale);
+		Entity entity = new Entity(id, position, rotation, scale);
 		entity.addComponent(new ModelComponent(entity, model));
 		entity.addComponent(new CollisionComponent(entity, md.getBoundingBox()));
 		entity.addComponent(new PlayerComponent(entity));

@@ -21,9 +21,9 @@ import tools.Maths;
 
 public class MasterRenderer {
 	
-	private static final float RED = 0.5f;
-	private static final float GREEN =  0.62f; 
-	private static final float BLUE = 0.7f;
+	private static final float RED = 0.3f;
+	private static final float GREEN =  0.42f; 
+	private static final float BLUE = 0.5f;
 		
 	private Frustum frustum;
 	
@@ -52,7 +52,7 @@ public class MasterRenderer {
 	
 	public void render(List<Entity> lights, Camera camera){
 		prepare();
-		
+			
 		entityShader.start();
 		entityShader.loadSkyColor(RED, GREEN, BLUE);
 		entityShader.loadLights(lights);

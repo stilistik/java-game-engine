@@ -57,33 +57,23 @@ public class PlayerComponent implements Component{
 		float dz = (float) (distance * Math.cos(Math.toRadians(owner.getRotY())));
 		float dy = upwardsSpeed * t;
 		increasePosition(dx, dy, dz);	
-		updateTransformation();
 	}
 	
 	private void increasePosition(float dx, float dy, float dz){
-		Vector3f position = owner.getPosition();
-		position.x += dx;
-		position.y += dy;
-		position.z += dz;
-		owner.setPosition(position);
+		owner.getPosition().x += dx;
+		owner.getPosition().y += dy;
+		owner.getPosition().z += dz;
 	}
 	
 	private void increaseRotation(float dRotX, float dRotY, float dRotZ){
-		Vector3f rotation = owner.getRotation();
-		rotation.x += dRotX;
-		rotation.y += dRotY;
-		rotation.z += dRotZ;
-		owner.setRotation(rotation);
-	}
-	
-	private void updateTransformation(){
-		owner.updateTransformation();
+		owner.getRotation().x += dRotX;
+		owner.getRotation().y += dRotY;
+		owner.getRotation().z += dRotZ;
 	}
 
 	@Override
 	public void update() {
-		checkInputs();
-		move();
+		owner.updateTransformation();
 	}
 	
 	private void jump(){

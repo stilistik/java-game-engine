@@ -1,4 +1,4 @@
-package objReader;
+package obj;
 
 import org.lwjgl.util.vector.Vector3f;
 

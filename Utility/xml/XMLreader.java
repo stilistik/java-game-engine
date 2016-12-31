@@ -1,10 +1,10 @@
-package xmlReader;
+package xml;
 
 import java.io.BufferedReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import fileSystem.ResFile;
+import file.ResFile;
 
 public class XMLreader {
 	

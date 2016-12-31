@@ -3,7 +3,7 @@ package skybox;
 import java.util.ArrayList;
 import java.util.List;
 
-import fileSystem.ResFile;
+import file.ResFile;
 import openGL.Vao;
 import texture.Texture;
 

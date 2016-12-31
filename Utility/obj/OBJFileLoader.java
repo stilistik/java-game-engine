@@ -1,4 +1,4 @@
-package objReader;
+package obj;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,7 +8,7 @@ import java.util.List;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
-import fileSystem.ResFile;
+import file.ResFile;
 
 public class OBJFileLoader {
 	

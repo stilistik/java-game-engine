@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import fileSystem.ResFile;
+import file.ResFile;
 import openGL.Vao;
 
 public class TerrainGeneratorHeightMap {

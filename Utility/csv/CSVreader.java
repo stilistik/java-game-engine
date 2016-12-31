@@ -1,11 +1,11 @@
-package csvReader;
+package csv;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import fileSystem.ResFile;
+import file.ResFile;
 import general.Settings;
 
 public class CSVreader {

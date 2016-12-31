@@ -1,4 +1,4 @@
-package objReader;
+package obj;
 
 public class ModelData {
 
