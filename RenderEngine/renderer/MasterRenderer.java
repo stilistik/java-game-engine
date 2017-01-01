@@ -10,8 +10,8 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector4f;
 
 import Camera.Camera;
-import component.CollisionComponent;
-import component.ModelComponent;
+import components.CollisionComponent;
+import components.ModelComponent;
 import entity.Entity;
 import shader.EntityShader;
 import shader.SkyboxShader;

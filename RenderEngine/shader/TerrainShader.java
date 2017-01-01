@@ -6,7 +6,8 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
 import Camera.Camera;
-import component.LightComponent;
+import components.LightComponent;
+import components.TransformationComponent;
 import entity.Entity;
 import tools.Maths;
 
@@ -94,7 +95,7 @@ public class TerrainShader extends ShaderProgram {
 	public void loadLights(List<Entity> lights){
 		for (int i = 0; i < MAX_LIGHTS; i++){
 			if (i < lights.size()){
-				super.loadVector3f(location_lightPosition[i], lights.get(i).getPosition());
+				super.loadVector3f(location_lightPosition[i], lights.get(i).getComponent(TransformationComponent.class).getPosition());
 				super.loadVector3f(location_lightColor[i], lights.get(i).getComponent(LightComponent.class).getColor());
 				super.loadVector3f(location_lightAttenuation[i], lights.get(i).getComponent(LightComponent.class).getAttenuation());
 			}else{

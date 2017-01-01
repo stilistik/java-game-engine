@@ -1,7 +1,8 @@
 package collision;
 
 import Camera.Camera;
-import component.PlayerComponent;
+import components.PlayerComponent;
+import components.TransformationComponent;
 import scene.Scene;
 
 public class CollisionManager {
@@ -21,10 +22,12 @@ public class CollisionManager {
 	}
 	
 	private void terrainCollision(){
-		float terrainHeight = scene.getTerrain().getHeightOfTerrain(scene.getPlayer().getPosition().x, scene.getPlayer().getPosition().z);
-		if (scene.getPlayer().getPosition().y < terrainHeight){
+		float xpos = scene.getPlayer().getComponent(TransformationComponent.class).getPosition().x;
+		float zpos = scene.getPlayer().getComponent(TransformationComponent.class).getPosition().z;
+		float terrainHeight = scene.getTerrain().getHeightOfTerrain(xpos, zpos);
+		if (scene.getPlayer().getComponent(TransformationComponent.class).getPosition().y < terrainHeight){
 			scene.getPlayer().getComponent(PlayerComponent.class).setUpwardsSpeed(0);
-			scene.getPlayer().getPosition().y = terrainHeight;
+			scene.getPlayer().getComponent(TransformationComponent.class).getPosition().y = terrainHeight;
 			scene.getPlayer().getComponent(PlayerComponent.class).setInAir(false);
 		}
 		terrainHeight = scene.getTerrain().getHeightOfTerrain(camera.getPosition().x, camera.getPosition().z);

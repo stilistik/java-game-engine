@@ -1,7 +1,9 @@
-package component;
+package components;
 
 import org.lwjgl.util.vector.Vector3f;
 
+import architecture.Component;
+import architecture.ComponentType;
 import entity.Entity;
 
 public class LightComponent implements Component {

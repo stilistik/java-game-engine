@@ -1,5 +1,7 @@
-package component;
+package components;
 
+import architecture.Component;
+import architecture.ComponentType;
 import entity.Entity;
 import model.Model;
 

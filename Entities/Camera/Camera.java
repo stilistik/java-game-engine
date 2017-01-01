@@ -4,6 +4,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
+import components.TransformationComponent;
 import entity.Entity;
 
 public class Camera {
@@ -32,13 +33,13 @@ public class Camera {
 		calculateAngleAroundPlayer();
 		float hDistance = (float) (distanceFromPlayer * Math.cos(Math.toRadians(pitch)));
 		float vDistance = (float) (distanceFromPlayer * Math.sin(Math.toRadians(pitch)));
-		float theta = player.getRotY() + angleAroundPlayer;
+		float theta = player.getComponent(TransformationComponent.class).getRotY() + angleAroundPlayer;
 		float xOffset = (float) (hDistance * Math.sin(Math.toRadians(theta)));
 		float zOffset = (float) (hDistance * Math.cos(Math.toRadians(theta)));
-		position.x = player.getPosition().x - xOffset;
-		position.y = player.getPosition().y + vDistance;
-		position.z = player.getPosition().z - zOffset;
-		yaw = 180 - (player.getRotY() + angleAroundPlayer);
+		position.x = player.getComponent(TransformationComponent.class).getPosition().x - xOffset;
+		position.y = player.getComponent(TransformationComponent.class).getPosition().y + vDistance;
+		position.z = player.getComponent(TransformationComponent.class).getPosition().z - zOffset;
+		yaw = 180 - (player.getComponent(TransformationComponent.class).getRotY() + angleAroundPlayer);
 	}
 	
 	private void calculateZoom(){

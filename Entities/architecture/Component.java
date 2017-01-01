@@ -1,4 +1,4 @@
-package component;
+package architecture;
 
 public interface Component {
 	

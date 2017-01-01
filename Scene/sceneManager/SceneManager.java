@@ -5,7 +5,8 @@ import java.util.Comparator;
 import org.lwjgl.util.vector.Vector3f;
 
 import Camera.Camera;
-import component.LightComponent;
+import components.LightComponent;
+import components.TransformationComponent;
 import entity.Entity;
 import renderer.MasterRenderer;
 import scene.Scene;
@@ -35,7 +36,7 @@ public class SceneManager {
 	private void sortLights(){
 		for (Entity light : scene.getLights()){
 			Vector3f v = new Vector3f();
-			Vector3f.sub(light.getPosition(), scene.getPlayer().getPosition(), v);
+			Vector3f.sub(light.getComponent(TransformationComponent.class).getPosition(), scene.getPlayer().getComponent(TransformationComponent.class).getPosition(), v);
 			light.getComponent(LightComponent.class).setDistanceToPlayer(v.length());
 		}
 		scene.getLights().sort(new LightDistanceSort());	

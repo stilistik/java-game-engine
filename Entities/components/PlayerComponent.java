@@ -1,8 +1,10 @@
-package component;
+package components;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector3f;
 
+import architecture.Component;
+import architecture.ComponentType;
 import display.DisplayManager;
 import entity.Entity;
 
@@ -53,28 +55,22 @@ public class PlayerComponent implements Component{
 		increaseRotation(0, currentTurnSpeed * t, 0);
 		float distance = currentSpeed * t;
 		upwardsSpeed += GRAVITY * t;
-		float dx = (float) (distance * Math.sin(Math.toRadians(owner.getRotY())));
-		float dz = (float) (distance * Math.cos(Math.toRadians(owner.getRotY())));
+		float dx = (float) (distance * Math.sin(Math.toRadians(owner.getComponent(TransformationComponent.class).getRotY())));
+		float dz = (float) (distance * Math.cos(Math.toRadians(owner.getComponent(TransformationComponent.class).getRotY())));
 		float dy = upwardsSpeed * t;
 		increasePosition(dx, dy, dz);	
 	}
 	
 	private void increasePosition(float dx, float dy, float dz){
-		owner.getPosition().x += dx;
-		owner.getPosition().y += dy;
-		owner.getPosition().z += dz;
+		owner.getComponent(TransformationComponent.class).increasePosition(dx, dy, dz);
 	}
 	
 	private void increaseRotation(float dRotX, float dRotY, float dRotZ){
-		owner.getRotation().x += dRotX;
-		owner.getRotation().y += dRotY;
-		owner.getRotation().z += dRotZ;
+		owner.getComponent(TransformationComponent.class).increaseRotation(dRotX, dRotY, dRotZ);
 	}
 
 	@Override
-	public void update() {
-		owner.updateTransformation();
-	}
+	public void update() {}
 	
 	private void jump(){
 		if (!inAir){

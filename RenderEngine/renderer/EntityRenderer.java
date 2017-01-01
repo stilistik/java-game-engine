@@ -6,9 +6,10 @@ import java.util.Map;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 
-import component.ModelComponent;
-import component.PlayerComponent;
-import component.TextureAtlasComponent;
+import components.ModelComponent;
+import components.PlayerComponent;
+import components.TextureAtlasComponent;
+import components.TransformationComponent;
 import entity.Entity;
 import shader.EntityShader;
 import texture.Texture;
@@ -53,7 +54,7 @@ public class EntityRenderer {
 	}
 	
 	private void prepareInstance(Entity entity){
-		shader.loadTransformationMatrix(entity.getTransformationMatrix());
+		shader.loadTransformationMatrix(entity.getComponent(TransformationComponent.class).getTransformationMatrix());
 		TextureAtlasComponent tac = entity.getComponent(TextureAtlasComponent.class);
 		if (tac != null){
 			shader.loadAtlasDimension(tac.getTextureAtlasDimension());

@@ -5,11 +5,12 @@ import java.util.Map;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import component.CollisionComponent;
-import component.LightComponent;
-import component.ModelComponent;
-import component.PlayerComponent;
-import component.TextureAtlasComponent;
+import components.CollisionComponent;
+import components.LightComponent;
+import components.ModelComponent;
+import components.PlayerComponent;
+import components.TextureAtlasComponent;
+import components.TransformationComponent;
 import entity.Entity;
 import file.ResFile;
 import model.Model;
@@ -23,7 +24,8 @@ public class EntityCreator {
 	private static Map<String, Model> models = new HashMap<String, Model>();
 	
 	public static Entity createLight(int id, Vector3f position, Vector3f color, Vector3f attenuation){
-		Entity entity = new Entity(id, position, new Vector3f(0,0,0),1);
+		Entity entity = new Entity(id);
+		entity.addComponent(new TransformationComponent(position, new Vector3f(0,0,0), 1));
 		entity.addComponent(new LightComponent(entity, color, attenuation));
 		return entity;
 	}
@@ -37,7 +39,8 @@ public class EntityCreator {
 		}		
 		model.getTexture().setTransparency(transparent);
 		model.getTexture().setFakeLight(fakeLight);
-		Entity entity = new Entity(id, position, rotation, scale);
+		Entity entity = new Entity(id);
+		entity.addComponent(new TransformationComponent(position,rotation,scale));
 		entity.addComponent(new ModelComponent(entity, model));
 		entity.addComponent(new TextureAtlasComponent(entity, textureAtlasDimension, textureIndex));
 		entity.addComponent(new CollisionComponent(entity, model.getBoundingBox()));
@@ -49,9 +52,10 @@ public class EntityCreator {
 		Texture texture = Texture.newTexture(new ResFile(entityFile, "texture.png")).create();
 		Vao vao = createVao(md);
 		Model model = new Model(vao, texture, md.getBoundingBox());
-		Entity entity = new Entity(id, position, rotation, scale);
+		Entity entity = new Entity(id);
+		entity.addComponent(new TransformationComponent(position, rotation, scale));
 		entity.addComponent(new ModelComponent(entity, model));
-		entity.addComponent(new CollisionComponent(entity, md.getBoundingBox()));
+		entity.addComponent(new CollisionComponent(entity, model.getBoundingBox()));
 		entity.addComponent(new PlayerComponent(entity));
 		return entity;	
 	}
