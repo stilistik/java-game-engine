@@ -7,7 +7,6 @@
 	<classpathentry kind="src" path="RenderEngine"/>
 	<classpathentry kind="src" path="PhysicsEngine"/>
 	<classpathentry kind="src" path="GameState"/>
-	<classpathentry kind="src" path="Animation"/>
 	<classpathentry kind="src" path="Utility"/>
 	<classpathentry kind="src" path="Resources"/>
 	<classpathentry kind="lib" path="lib/jars/lwjgl_util.jar"/>
