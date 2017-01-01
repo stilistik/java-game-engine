@@ -19,6 +19,7 @@ public class CollisionManager {
 		terrainCollision();
 		scene.getPlayer().updateComponents();
 		camera.move();
+		terrainCollisionCamera();
 	}
 	
 	private void terrainCollision(){
@@ -30,7 +31,10 @@ public class CollisionManager {
 			scene.getPlayer().getComponent(TransformationComponent.class).getPosition().y = terrainHeight;
 			scene.getPlayer().getComponent(PlayerComponent.class).setInAir(false);
 		}
-		terrainHeight = scene.getTerrain().getHeightOfTerrain(camera.getPosition().x, camera.getPosition().z);
+	}
+	
+	private void terrainCollisionCamera(){
+		float terrainHeight = scene.getTerrain().getHeightOfTerrain(camera.getPosition().x, camera.getPosition().z);
 		if (camera.getPosition().y < terrainHeight + CAMERA_TERRAIN_COLLISION_OFFSET){
 			camera.getPosition().y = terrainHeight + CAMERA_TERRAIN_COLLISION_OFFSET;
 		}
