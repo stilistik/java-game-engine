@@ -5,6 +5,7 @@ import java.util.List;
 
 import entity.Entity;
 import terrain.Terrain;
+import water.WaterTile;
 
 public class Scene {
 
@@ -12,6 +13,7 @@ public class Scene {
 	private Terrain terrain;
 	private List<Entity> entities = new ArrayList<Entity>();
 	private List<Entity> lights = new ArrayList<Entity>();
+	private List<WaterTile> waterTiles = new ArrayList<WaterTile>();
 	
 	public Scene () {}
 	
@@ -21,6 +23,10 @@ public class Scene {
 	
 	public void addLight(Entity light){
 		lights.add(light);
+	}
+	
+	public void addWaterTile(WaterTile waterTile){
+		waterTiles.add(waterTile);
 	}
 	
 	public void setTerrain(Terrain terrain){
@@ -45,5 +51,9 @@ public class Scene {
 	
 	public List<Entity> getLights(){
 		return lights;
+	}
+	
+	public List<WaterTile> getWaterTiles(){
+		return waterTiles;
 	}
 }

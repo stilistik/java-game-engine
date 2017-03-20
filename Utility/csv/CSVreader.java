@@ -2,13 +2,86 @@ package csv;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.util.vector.Vector2f;
+import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
+
 import file.ResFile;
 import general.Settings;
+import tools.LineSplitter;
 
 public class CSVreader {
+	
+	private static final String SEPARATOR = ";";
+	private BufferedReader reader;
+	private LineSplitter splitter;
+	
+	public CSVreader(ResFile csvFile) throws Exception{
+		reader = csvFile.getReader();
+	}
+	
+	public String nextLine(){
+		String line = null;
+		try {
+			line = reader.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		if (line != null){
+			splitter = new LineSplitter(line, SEPARATOR);
+			return line;
+		}else{
+			return null;
+		}
+	}
+	
+	public String nextString(){
+		return splitter.nextString();
+	}
+	
+	public int nextInt(){
+		return splitter.nextInt();
+	}
+	
+	public long nextLong(){
+		return splitter.nextLong();
+	}
+	
+	public float nextFloat(){
+		return splitter.nextFloat();
+	}
+	
+	public double nextDouble(){
+		return splitter.nextDouble();
+	}
+	
+	public Vector2f nextVector2f(){
+		return splitter.nextVector2f();
+	}
+	
+	public Vector3f nextVector3f(){
+		return splitter.nextVector3f();
+	}
+	
+	public Vector4f nextVector4f(){
+		return splitter.nextVector4f();
+	}
+	
+	public boolean nextBoolean(){
+		return splitter.nextBoolean();
+	}
+	
+	public boolean hasNext(){
+		return splitter.hasNext();
+	}
+	
+	public void close() throws IOException{
+		reader.close();
+	}
 	
 	public static List<String[]> readStringCSV(ResFile dataFile){
 		ArrayList<String[]> data = new ArrayList<String[]>();

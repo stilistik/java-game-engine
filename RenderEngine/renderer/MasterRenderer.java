@@ -16,8 +16,10 @@ import entity.Entity;
 import shader.EntityShader;
 import shader.SkyboxShader;
 import shader.TerrainShader;
+import shader.WaterShader;
 import terrain.Terrain;
 import tools.Maths;
+import water.WaterTile;
 
 public class MasterRenderer {
 	
@@ -36,6 +38,9 @@ public class MasterRenderer {
 	private SkyboxRenderer skyboxRenderer;
 	private SkyboxShader skyboxShader;
 	
+	private WaterRenderer waterRenderer;
+	private WaterShader waterShader;
+	
 	private Map<ModelComponent, List<Entity>> entities = new HashMap<ModelComponent, List<Entity>>();
 	private List<Terrain> terrains = new ArrayList<Terrain>();
 	
@@ -43,20 +48,23 @@ public class MasterRenderer {
 		enableCulling();
 		frustum = new Frustum();	
 		entityShader = new EntityShader();
-		entityRenderer = new EntityRenderer(entityShader, frustum.getProjectionMatrix());
+		entityRenderer = new EntityRenderer(entityShader);
 		terrainShader = new TerrainShader();
-		terrainRenderer = new TerrainRenderer(terrainShader, frustum.getProjectionMatrix());
+		terrainRenderer = new TerrainRenderer(terrainShader);
 		skyboxShader = new SkyboxShader();
-		skyboxRenderer = new SkyboxRenderer(skyboxShader, frustum.getProjectionMatrix());
+		skyboxRenderer = new SkyboxRenderer(skyboxShader);
+		waterShader = new WaterShader();
+		waterRenderer = new WaterRenderer(waterShader);
 	}
 	
-	public void render(List<Entity> lights, Camera camera){
+	public void render(List<Entity> lights, List<WaterTile> waterTiles, Camera camera){
 		prepare();
 			
 		entityShader.start();
 		entityShader.loadSkyColor(RED, GREEN, BLUE);
 		entityShader.loadLights(lights);
 		entityShader.loadViewMatrix(camera);
+		entityShader.loadProjectionMatrix(frustum.getProjectionMatrix());
 		entityRenderer.render(entities);
 		entityShader.stop();
 		
@@ -64,10 +72,20 @@ public class MasterRenderer {
 		terrainShader.loadSkyColor(RED, GREEN, BLUE);
 		terrainShader.loadLights(lights);
 		terrainShader.loadViewMatrix(camera);
+		terrainShader.loadProjectionMatrix(frustum.getProjectionMatrix());
 		terrainRenderer.render(terrains);
 		terrainShader.stop();
 		
+		waterShader.start();
+		waterShader.loadViewMatrix(camera);
+		waterShader.loadProjectionMatrix(frustum.getProjectionMatrix());
+		waterRenderer.render(waterTiles, camera);
+		waterShader.stop();
+		
+		skyboxShader.start();
+		skyboxShader.loadProjectionMatrix(frustum.getProjectionMatrix());
 		skyboxRenderer.render(camera, RED, GREEN, BLUE);
+		skyboxShader.stop();
 
 		clearMaps();
 	}

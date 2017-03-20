@@ -30,7 +30,7 @@ public class SceneManager {
 		}
 		renderer.processEntity(scene.getPlayer(), camera);
 		renderer.processTerrain(scene.getTerrain());
-		renderer.render(scene.getLights(), camera);		
+		renderer.render(scene.getLights(), scene.getWaterTiles(), camera);		
 	}
 	
 	private void sortLights(){

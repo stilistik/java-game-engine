@@ -18,11 +18,8 @@ public class EntityRenderer {
 		
 	private EntityShader shader;
 	
-	public EntityRenderer(EntityShader shader, Matrix4f projectionMatrix){
+	public EntityRenderer(EntityShader shader){
 		this.shader = shader;
-		this.shader.start();
-		this.shader.loadProjectionMatrix(projectionMatrix);
-		this.shader.stop();
 	}
 	
 	public void render(Map<ModelComponent, List<Entity>> entities){

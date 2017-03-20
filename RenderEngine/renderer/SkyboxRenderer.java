@@ -13,11 +13,10 @@ public class SkyboxRenderer {
 	private Skybox skybox = new Skybox();
 	private SkyboxShader shader;
 	
-	public SkyboxRenderer(SkyboxShader shader, Matrix4f projectionMatrix){
+	public SkyboxRenderer(SkyboxShader shader){
 		this.shader = shader;
 		this.shader.start();
 		this.shader.connectTextureUnits();
-		this.shader.loadProjectionMatrix(projectionMatrix);
 		this.shader.stop();		
 	}
 	

@@ -32,14 +32,17 @@ public class CSVwriter {
 				float x = random.nextFloat() * Terrain.SIZE;
 				float z = random.nextFloat() * Terrain.SIZE;
 				float y = terrain.getHeightOfTerrain(x, z);
+				if (y < -8){
+					continue;
+				}
 				float rx = 0;
 				float ry = random.nextFloat() * 360;
 				float rz = 0;
 				float scale = 1;
-				float atlasDim = 1;
-				float texIndex = 0;
-				float fakeLight = 0;
-				float transparent = 0;
+				int atlasDim = 1;
+				int texIndex = 0;
+				int fakeLight = 0;
+				int transparent = 0;
 				writer.append(entity_id+DELIM+model_id+DELIM+x+DELIM+y+DELIM+z+DELIM+rx+DELIM+ry+DELIM+rz+DELIM+scale+
 							DELIM+atlasDim+DELIM+texIndex+DELIM+fakeLight+DELIM+transparent+"\n");
 				entity_id++;
@@ -51,14 +54,17 @@ public class CSVwriter {
 				float x = random.nextFloat() * Terrain.SIZE;
 				float z = random.nextFloat() * Terrain.SIZE;
 				float y = terrain.getHeightOfTerrain(x, z);
+				if (y < -8){
+					continue;
+				}
 				float rx = 0;
 				float ry = random.nextFloat() * 360;
 				float rz = 0;
 				float scale = 2;
-				float atlasDim = 1;
-				float texIndex = 0;
-				float fakeLight = 0;
-				float transparent = 0;
+				int atlasDim = 1;
+				int texIndex = 0;
+				int fakeLight = 0;
+				int transparent = 0;
 				writer.append(entity_id+DELIM+model_id+DELIM+x+DELIM+y+DELIM+z+DELIM+rx+DELIM+ry+DELIM+rz+DELIM+scale+
 						DELIM+atlasDim+DELIM+texIndex+DELIM+fakeLight+DELIM+transparent+"\n");			
 				entity_id++;
@@ -70,37 +76,22 @@ public class CSVwriter {
 				float x = random.nextFloat() * Terrain.SIZE;
 				float z = random.nextFloat() * Terrain.SIZE;
 				float y = terrain.getHeightOfTerrain(x, z);
+				if (y < -8){
+					continue;
+				}
 				float rx = 0;
 				float ry = random.nextFloat() * 360;
 				float rz = 0;
 				float scale = 1;
-				float atlasDim = 2;
+				int atlasDim = 2;
 				int texIndex = random.nextInt(4);
-				float fakeLight = 0;
-				float transparent = 0;
+				int fakeLight = 0;
+				int transparent = 0;
 				writer.append(entity_id+DELIM+model_id+DELIM+x+DELIM+y+DELIM+z+DELIM+rx+DELIM+ry+DELIM+rz+DELIM+scale+
 						DELIM+atlasDim+DELIM+texIndex+DELIM+fakeLight+DELIM+transparent+"\n");			
 				entity_id++;
 			}
 			model_id++;
-			
-			// grass
-			for (int i = 0; i < 800; i++){
-				float x = random.nextFloat() * Terrain.SIZE;
-				float z = random.nextFloat() * Terrain.SIZE;
-				float y = terrain.getHeightOfTerrain(x, z);
-				float rx = 0;
-				float ry = random.nextFloat() * 360;
-				float rz = 0;
-				float scale = 2;
-				float atlasDim = 1;
-				int texIndex = 0;
-				float fakeLight = 1;
-				float transparent = 1;
-				writer.append(entity_id+DELIM+model_id+DELIM+x+DELIM+y+DELIM+z+DELIM+rx+DELIM+ry+DELIM+rz+DELIM+scale+
-						DELIM+atlasDim+DELIM+texIndex+DELIM+fakeLight+DELIM+transparent+"\n");			
-				entity_id++;
-			}
 			model_id++;
 			
 			// lamp
@@ -108,21 +99,24 @@ public class CSVwriter {
 				float x = random.nextFloat() * Terrain.SIZE;
 				float z = random.nextFloat() * Terrain.SIZE;
 				float y = terrain.getHeightOfTerrain(x, z);
+				if (y < -8){
+					continue;
+				}
 				float rx = 0;
 				float ry = random.nextFloat() * 360;
 				float rz = 0;
 				float scale = 1;
-				float atlasDim = 1;
-				float texIndex = 0;
-				float fakeLight = 1;
-				float transparent = 0;
+				int atlasDim = 1;
+				int texIndex = 0;
+				int fakeLight = 1;
+				int transparent = 0;
 				float offset = 19f;
-				float cx = random.nextFloat()+0.3f;
-				float cy = random.nextFloat()+0.3f;
-				float cz = random.nextFloat()+0.3f;
+				float cx = 4*random.nextFloat();
+				float cy = 3*random.nextFloat();
+				float cz = 3*random.nextFloat();
 				float ax = 1;
 				float ay = 0.01f;
-				float az = 0.0001f;
+				float az = 0.001f;
 				writer.append(entity_id+DELIM+model_id+DELIM+x+DELIM+y+DELIM+z+DELIM+rx+DELIM+ry+DELIM+rz+DELIM+scale+DELIM+atlasDim+
 								DELIM+texIndex+DELIM+fakeLight+DELIM+transparent+DELIM+offset+DELIM+cx+DELIM+cy+DELIM+cz+DELIM+ax+DELIM+ay+DELIM+az+"\n");
 				entity_id++;
